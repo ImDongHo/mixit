@@ -1,0 +1,12058 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MIXIT</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@500&family=Black+Han+Sans&family=Do+Hyeon&family=Nanum+Myeongjo:wght@400;700;800&family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#2A2A2E;
+  --panel:#38383D;
+  --rail:#252528;
+  --border:#4A4A50;
+  --border-strong:#5C5C63;
+  --ink:#FFFFFF;
+  --ink-soft:#B4B4BA;
+  --ink-faint:#8A8A90;
+  --accent:#0A84FF;
+  --accent-soft:rgba(10,132,255,0.2);
+  --danger:#FF453A;
+  --danger-soft:rgba(255,69,58,0.2);
+  --ok:#32D74B;
+  --ok-soft:rgba(50,215,75,0.2);
+  --surface-2:#45454C;
+  --radius:8px;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  width:100%;
+  height:100%;
+  margin:0;
+  padding:0;
+}
+
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Noto Sans KR',sans-serif;
+  font-size:14px;
+  color-scheme:dark;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+
+button,
+input,
+textarea,
+select{
+  font-family:inherit;
+  color:var(--ink);
+}
+
+button{
+  cursor:pointer;
+}
+
+svg{
+  display:block;
+}
+
+.mono{
+  font-family:'IBM Plex Mono',monospace;
+}
+
+.dim{
+  color:var(--ink-soft);
+}
+
+.small{
+  font-size:12px;
+}
+
+
+/* =========================================================
+   BUTTON
+========================================================= */
+
+.btn{
+  border:1px solid var(--border-strong);
+  background:var(--panel);
+  color:var(--ink);
+  border-radius:var(--radius);
+  padding:8px 13px;
+  font-size:13px;
+  font-weight:600;
+}
+
+.btn:hover{
+  background:var(--bg);
+}
+
+.btn.primary{
+  background:var(--accent);
+  border-color:var(--accent);
+  color:#fff;
+}
+
+.btn.primary:hover{
+  background:#0066CC;
+}
+
+.btn.ghost{
+  background:transparent;
+  border-style:dashed;
+}
+
+.btn.small{
+  padding:6px 9px;
+  font-size:12px;
+}
+
+.btn.danger{
+  background:var(--danger-soft);
+  border-color:var(--danger);
+  color:var(--danger);
+}
+
+.btn:disabled{
+  opacity:.4;
+  cursor:not-allowed;
+}
+
+.btn.toggle.active{
+  background:var(--accent);
+  border-color:var(--accent);
+  color:#fff;
+}
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
+.msg{
+  display:none;
+  margin-top:8px;
+  padding:8px 10px;
+  border-radius:var(--radius);
+  font-size:12px;
+  border:1px solid transparent;
+}
+
+.msg.error{
+  display:block;
+  background:var(--danger-soft);
+  border-color:var(--danger);
+  color:#FF8A80;
+}
+
+.msg.ok{
+  display:block;
+  background:var(--ok-soft);
+  border-color:var(--ok);
+  color:#7EE08A;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.topbar-global{
+  height:64px;
+  flex-shrink:0;
+  background:var(--panel);
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 20px;
+  z-index:20;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  font-weight:900;
+  font-size:26px;
+  letter-spacing:-.8px;
+  background:linear-gradient(90deg, #FFFFFF 0%, var(--accent) 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  -webkit-text-fill-color:transparent;
+}
+
+.header-crumb{
+  font-size:12px;
+  color:var(--ink-soft);
+  font-weight:600;
+  background:var(--bg);
+  border:1px solid var(--border);
+  padding:6px 12px;
+  border-radius:20px;
+}
+
+.header-actions{
+  display:flex;
+  gap:8px;
+}
+
+
+/* =========================================================
+   APP
+========================================================= */
+
+.app{
+  display:grid;
+  grid-template-columns:76px 258px minmax(400px,1fr) 310px;
+  flex:1;
+  min-height:0;
+}
+
+
+/* =========================================================
+   LEFT RAIL
+========================================================= */
+
+.rail{
+  width:76px;
+  background:var(--rail);
+  border-right:1px solid var(--border);
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  padding:12px 8px;
+  gap:4px;
+  overflow-y:auto;
+}
+
+.rail-btn{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  border:none;
+  background:transparent;
+  border-radius:10px;
+  padding:9px 2px 8px;
+  color:var(--ink-soft);
+  font-size:11px;
+  font-weight:600;
+  min-height:58px;
+}
+
+.rail-btn svg{
+  width:21px;
+  height:21px;
+}
+
+.rail-btn:hover{
+  background:var(--bg);
+  color:var(--ink);
+}
+
+.rail-btn.active{
+  background:var(--accent-soft);
+  color:var(--accent);
+}
+
+
+/* =========================================================
+   LEFT PANEL
+========================================================= */
+
+.rail-panel{
+  width:258px;
+  background:var(--panel);
+  border-right:1px solid var(--border);
+  overflow-y:auto;
+  display:flex;
+  flex-direction:column;
+}
+
+.tab-content{
+  padding:18px;
+  display:flex;
+  flex-direction:column;
+  min-height:0;
+  flex:1;
+}
+
+.tab-content[hidden]{
+  display:none !important;
+}
+
+.tab-content h3{
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.6px;
+  color:var(--ink-soft);
+  margin:0 0 12px;
+  font-weight:700;
+}
+
+.desc{
+  font-size:12px;
+  color:var(--ink-faint);
+  margin:0 0 14px;
+  line-height:1.5;
+}
+
+
+/* =========================================================
+   ASPECT
+========================================================= */
+
+.size-cards{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.size-card{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  border:1px solid var(--border-strong);
+  border-radius:var(--radius);
+  background:var(--panel);
+  padding:10px 12px;
+  cursor:pointer;
+  text-align:left;
+}
+
+.size-card.active{
+  border-color:var(--accent);
+  background:var(--accent-soft);
+}
+
+.size-card .swatch{
+  width:30px;
+  background:var(--border);
+  border:1px solid var(--border-strong);
+  border-radius:3px;
+  flex-shrink:0;
+}
+
+.card-label{
+  font-size:12.5px;
+  font-weight:700;
+}
+
+.card-sub{
+  font-size:10.5px;
+  color:var(--ink-faint);
+}
+
+
+/* =========================================================
+   ASSETS
+========================================================= */
+
+.asset-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+}
+
+.asset-card{
+  aspect-ratio:1;
+  border:1px solid var(--border-strong);
+  border-radius:8px;
+  background:var(--panel);
+  overflow:hidden;
+  padding:0;
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.asset-card:hover{
+  border-color:var(--accent);
+  box-shadow:0 0 0 2px var(--accent-soft);
+}
+
+.asset-card img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+}
+
+.asset-emoji{
+  font-size:38px;
+  line-height:1;
+}
+
+.asset-card .asset-name{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  padding:3px 4px;
+  font-size:9px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  background:rgba(56,56,61,.9);
+}
+
+.upload-box{
+  display:block;
+  border:1px dashed var(--border-strong);
+  border-radius:8px;
+  padding:13px 8px;
+  text-align:center;
+  color:var(--ink-soft);
+  font-size:11.5px;
+  font-weight:600;
+  margin-bottom:10px;
+}
+
+.upload-box:hover{
+  border-color:var(--accent);
+  color:var(--accent);
+  background:var(--accent-soft);
+}
+
+#imageFileInput,
+#jsonInput{
+  display:none;
+}
+
+
+/* =========================================================
+   TEXT TAB
+========================================================= */
+
+.text-add-box{
+  border:1px solid var(--border);
+  background:var(--bg);
+  border-radius:10px;
+  padding:14px;
+}
+
+.text-add-box strong{
+  display:block;
+  font-size:13px;
+  margin-bottom:5px;
+}
+
+.text-add-box p{
+  margin:0 0 12px;
+  color:var(--ink-faint);
+  font-size:11.5px;
+  line-height:1.5;
+}
+
+
+/* =========================================================
+   LAYERS
+========================================================= */
+
+.layer-heading{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:9px;
+}
+
+.layer-heading h3{
+  margin:0;
+}
+
+.layer-count{
+  font-size:10.5px;
+  color:var(--ink-faint);
+  margin-left:4px;
+}
+
+.layer-list{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  min-height:60px;
+  overflow-y:auto;
+}
+
+.layer-item{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  border:1px solid var(--border-strong);
+  border-radius:8px;
+  padding:7px 8px;
+  background:var(--panel);
+  cursor:pointer;
+  min-width:0;
+}
+
+.layer-item:hover{
+  border-color:var(--accent);
+}
+
+.layer-item.active{
+  border-color:var(--accent);
+  background:var(--accent-soft);
+  color:var(--accent);
+}
+
+.layer-item.canvas-layer{
+  cursor:default;
+  background:var(--surface-2);
+}
+
+.layer-item .icon{
+  width:27px;
+  height:27px;
+  border-radius:6px;
+  background:var(--surface-2);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+  overflow:hidden;
+  font-size:12px;
+}
+
+.layer-item.active .icon{
+  background:var(--accent);
+  color:#fff;
+}
+
+.layer-item .icon img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+
+.layer-item .name{
+  flex:1;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:11.5px;
+  font-weight:600;
+}
+
+.layer-actions{
+  display:flex;
+  gap:1px;
+  flex-shrink:0;
+}
+
+.mini-btn{
+  border:none;
+  background:transparent;
+  color:var(--ink-faint);
+  width:21px;
+  height:21px;
+  border-radius:5px;
+  padding:0;
+}
+
+.mini-btn:hover{
+  background:var(--border);
+  color:var(--ink);
+}
+
+.mini-btn.delete:hover{
+  background:var(--danger-soft);
+  color:var(--danger);
+}
+
+.mini-btn:disabled{
+  opacity:.25;
+  cursor:not-allowed;
+}
+
+.layer-bottom{
+  display:flex;
+  gap:6px;
+  margin-top:auto;
+  padding-top:10px;
+}
+
+
+/* =========================================================
+   TEMPLATE
+========================================================= */
+
+.template-toolbar{
+  display:flex;
+  gap:6px;
+  margin-bottom:8px;
+}
+
+.template-toolbar input{
+  flex:1;
+  min-width:0;
+  border:1px solid var(--border-strong);
+  border-radius:var(--radius);
+  padding:7px 9px;
+  font-size:12px;
+  background:var(--panel);
+}
+
+.template-list{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  overflow-y:auto;
+  flex:1;
+}
+
+.template-item{
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:9px 10px;
+  background:var(--bg);
+}
+
+.t-name{
+  font-weight:700;
+  font-size:12.5px;
+}
+
+.t-meta{
+  font-size:10.5px;
+  color:var(--ink-faint);
+  margin-top:2px;
+}
+
+.t-actions{
+  display:flex;
+  gap:5px;
+  margin-top:7px;
+  flex-wrap:wrap;
+}
+
+.json-actions{
+  display:flex;
+  gap:6px;
+  margin-top:10px;
+  padding-top:10px;
+  border-top:1px solid var(--border);
+}
+
+.json-actions .btn{
+  flex:1;
+}
+
+
+/* =========================================================
+   WORKSPACE
+========================================================= */
+
+.workspace{
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+  min-height:0;
+  position:relative;
+}
+
+.canvas-area{
+  flex:1;
+  min-height:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:35px;
+  overflow:auto;
+  background:var(--bg);
+}
+
+.canvas-frame{
+  position:relative;
+  background:var(--panel);
+  border:1px solid var(--border-strong);
+  border-radius:5px;
+  box-shadow:
+    0 1px 3px rgba(0,0,0,.08),
+    0 10px 35px rgba(0,0,0,.10);
+  flex-shrink:0;
+}
+
+canvas{
+  display:block;
+  max-width:60vw;
+  max-height:68vh;
+  cursor:default;
+  background:
+    linear-gradient(45deg,#4A4A50 25%,transparent 25%),
+    linear-gradient(-45deg,#4A4A50 25%,transparent 25%),
+    linear-gradient(45deg,transparent 75%,#4A4A50 75%),
+    linear-gradient(-45deg,transparent 75%,#4A4A50 75%);
+  background-color:#5C5C63;
+  background-size:16px 16px;
+  background-position:0 0, 0 8px, 8px -8px, -8px 0;
+  user-select:none;
+}
+
+.canvas-frame.developing canvas{
+  animation:develop .5s ease-out;
+}
+
+@keyframes develop{
+  0%{
+    filter:grayscale(.4) brightness(.7);
+    opacity:.5;
+  }
+
+  100%{
+    filter:none;
+    opacity:1;
+  }
+}
+
+
+/* =========================================================
+   CONTEXT TOOLBAR
+========================================================= */
+
+.context-toolbar{
+  position:absolute;
+  top:12px;
+  left:50%;
+  transform:translateX(-50%);
+  min-height:44px;
+  background:rgba(56,56,61,.95);
+  border:1px solid var(--border-strong);
+  border-radius:10px;
+  box-shadow:0 5px 20px rgba(0,0,0,.12);
+  display:none;
+  align-items:center;
+  gap:5px;
+  padding:5px;
+  z-index:15;
+  backdrop-filter:blur(10px);
+}
+
+.context-toolbar.show{
+  display:flex;
+}
+
+.context-toolbar .tool-btn{
+  border:1px solid transparent;
+  background:transparent;
+  border-radius:6px;
+  height:32px;
+  padding:0 8px;
+  font-size:12px;
+  font-weight:600;
+  color:var(--ink-soft);
+}
+
+.context-toolbar .tool-btn:hover{
+  background:var(--bg);
+  color:var(--ink);
+}
+
+.context-toolbar .separator{
+  width:1px;
+  height:22px;
+  background:var(--border);
+}
+
+
+/* =========================================================
+   SELECTION
+========================================================= */
+
+.selection-box{
+  position:absolute;
+  pointer-events:none;
+  border:1.5px solid var(--accent);
+  box-shadow:0 0 0 1px rgba(10,132,255,.28);
+  display:none;
+  z-index:8;
+}
+
+.selection-box.show{
+  display:block;
+}
+
+.selection-handle{
+  position:absolute;
+  width:10px;
+  height:10px;
+  border:2px solid var(--accent);
+  background:#fff;
+  border-radius:2px;
+  pointer-events:auto;
+}
+
+.handle-nw{
+  left:-5px;
+  top:-5px;
+  cursor:nwse-resize;
+}
+
+.handle-n{
+  left:50%;
+  top:-5px;
+  transform:translateX(-50%);
+  cursor:ns-resize;
+}
+
+.handle-ne{
+  right:-5px;
+  top:-5px;
+  cursor:nesw-resize;
+}
+
+.handle-e{
+  right:-5px;
+  top:50%;
+  transform:translateY(-50%);
+  cursor:ew-resize;
+}
+
+.handle-se{
+  right:-5px;
+  bottom:-5px;
+  cursor:nwse-resize;
+}
+
+.handle-s{
+  left:50%;
+  bottom:-5px;
+  transform:translateX(-50%);
+  cursor:ns-resize;
+}
+
+.handle-sw{
+  left:-5px;
+  bottom:-5px;
+  cursor:nesw-resize;
+}
+
+.handle-w{
+  left:-5px;
+  top:50%;
+  transform:translateY(-50%);
+  cursor:ew-resize;
+}
+
+.rotation-handle{
+  position:absolute;
+  width:10px;
+  height:10px;
+  border:2px solid var(--accent);
+  background:#fff;
+  border-radius:50%;
+  top:-29px;
+  left:50%;
+  transform:translateX(-50%);
+  pointer-events:auto;
+  cursor:grab;
+}
+
+.rotation-line{
+  position:absolute;
+  width:1px;
+  height:20px;
+  background:var(--accent);
+  top:-20px;
+  left:50%;
+  transform:translateX(-50%);
+}
+
+
+/* =========================================================
+   INSPECTOR
+========================================================= */
+
+.inspector{
+  background:var(--panel);
+  border-left:1px solid var(--border);
+  overflow-y:auto;
+  min-width:0;
+}
+
+.inspector-title{
+  height:49px;
+  display:flex;
+  align-items:center;
+  padding:0 18px;
+  border-bottom:1px solid var(--border);
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.6px;
+  color:var(--ink-soft);
+  font-weight:700;
+}
+
+.pin-add-row{
+  display:flex;
+  gap:6px;
+  padding:10px 12px;
+  border-bottom:1px solid var(--border);
+  background:var(--accent-soft);
+}
+
+.pin-add-btn{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:1px;
+  border:1px solid var(--border-strong);
+  border-radius:var(--radius);
+  background:var(--panel);
+  color:var(--ink-soft);
+  padding:6px 2px;
+  font-size:10.5px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.pin-add-btn:hover{
+  background:var(--surface-2);
+  color:var(--ink);
+}
+
+.pin-add-btn.active{
+  border-color:var(--accent);
+  background:var(--accent-soft);
+  color:var(--accent);
+}
+
+.pin-add-btn:hover{
+  background:var(--accent-soft);
+}
+
+.pin-add-icon{
+  font-size:13px;
+  line-height:1;
+}
+
+.object-header{
+  padding:15px 18px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.object-icon{
+  width:32px;
+  height:32px;
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--accent-soft);
+  color:var(--accent);
+  font-weight:800;
+}
+
+.object-info{
+  min-width:0;
+}
+
+.object-info strong{
+  display:block;
+  font-size:13px;
+}
+
+.object-info span{
+  display:block;
+  font-size:10.5px;
+  color:var(--ink-faint);
+  margin-top:2px;
+}
+
+.insp-block{
+  padding:16px 18px;
+  border-bottom:1px solid var(--border);
+}
+
+.insp-block h4{
+  margin:0 0 12px;
+  font-size:13px;
+}
+
+.field{
+  margin-bottom:14px;
+}
+
+.field:last-child{
+  margin-bottom:0;
+}
+
+.field label{
+  display:block;
+  font-size:12px;
+  font-weight:600;
+  margin-bottom:6px;
+  color:var(--ink-soft);
+}
+
+.field textarea{
+  width:100%;
+  min-height:64px;
+  resize:vertical;
+  border:1px solid var(--border-strong);
+  border-radius:var(--radius);
+  padding:9px;
+  font-size:13px;
+  background:var(--panel);
+}
+
+.field input[type=range]{
+  width:100%;
+  -webkit-appearance:none;
+  appearance:none;
+  height:4px;
+  border-radius:2px;
+  background:transparent;
+  outline:none;
+}
+
+.field input[type=range]::-webkit-slider-runnable-track{
+  height:4px;
+  border-radius:2px;
+  background:linear-gradient(to right, var(--accent) var(--range-pct,0%), var(--border-strong) var(--range-pct,0%));
+}
+
+.field input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  width:16px;
+  height:16px;
+  border-radius:50%;
+  background:#FFFFFF;
+  box-shadow:0 1px 3px rgba(0,0,0,.4);
+  cursor:pointer;
+  margin-top:-6px;
+}
+
+.field input[type=range]::-moz-range-track{
+  height:4px;
+  border-radius:2px;
+  background:linear-gradient(to right, var(--accent) var(--range-pct,0%), var(--border-strong) var(--range-pct,0%));
+}
+
+.field input[type=range]::-moz-range-thumb{
+  width:16px;
+  height:16px;
+  border-radius:50%;
+  background:#FFFFFF;
+  box-shadow:0 1px 3px rgba(0,0,0,.4);
+  cursor:pointer;
+  border:none;
+}
+
+.field input[type=color]{
+  width:40px;
+  height:30px;
+  border:1px solid var(--border-strong);
+  border-radius:6px;
+  padding:0;
+}
+
+.field select{
+  width:100%;
+  border:1px solid var(--border-strong);
+  border-radius:var(--radius);
+  padding:8px 9px;
+  background:var(--panel);
+  color:var(--ink);
+}
+
+.row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.row .val{
+  width:52px;
+  text-align:right;
+  font-size:11px;
+  color:var(--ink-soft);
+}
+
+.two-col{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+.number-input{
+  width:100%;
+  border:1px solid var(--border-strong);
+  border-radius:var(--radius);
+  padding:8px;
+  background:var(--panel);
+}
+
+.val-input{
+  width:58px;
+  border:1px solid var(--border-strong);
+  border-radius:var(--radius);
+  padding:8px 6px;
+  text-align:center;
+  background:var(--panel);
+}
+
+.bius-row{
+  display:flex;
+  gap:5px;
+}
+
+.bius-btn{
+  width:38px;
+  height:34px;
+  padding:0;
+}
+
+.check-row{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  font-size:12.5px;
+  font-weight:600;
+}
+
+.quick-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6px;
+}
+
+.image-preview{
+  width:100%;
+  aspect-ratio:16/9;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:var(--surface-2);
+  object-fit:contain;
+  margin-bottom:10px;
+}
+
+.empty-state{
+  padding:40px 20px;
+  text-align:center;
+  color:var(--ink-faint);
+  font-size:12.5px;
+  line-height:1.7;
+}
+
+
+/* =========================================================
+   SWITCH
+========================================================= */
+
+.switch{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  width:38px;
+  height:22px;
+  flex-shrink:0;
+}
+
+.switch input{
+  position:absolute;
+  opacity:0;
+  width:0;
+  height:0;
+}
+
+.switch-track{
+  width:38px;
+  height:22px;
+  border-radius:99px;
+  background:var(--surface-2);
+  position:relative;
+  transition:.2s ease;
+}
+
+.switch-track::after{
+  content:"";
+  position:absolute;
+  width:16px;
+  height:16px;
+  border-radius:50%;
+  background:#fff;
+  top:3px;
+  left:3px;
+  box-shadow:0 1px 3px rgba(0,0,0,.18);
+  transition:.2s ease;
+}
+
+.switch input:checked + .switch-track{
+  background:var(--accent);
+}
+
+.switch input:checked + .switch-track::after{
+  left:19px;
+}
+
+
+/* =========================================================
+   COLLAPSE
+========================================================= */
+
+.collapse{
+  border-top:1px solid var(--border);
+}
+
+.collapse-head{
+  min-height:46px;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  cursor:pointer;
+  user-select:none;
+}
+
+.collapse-head .chev{
+  font-size:19px;
+  line-height:1;
+  width:12px;
+  color:var(--ink-soft);
+  transform:rotate(0deg);
+  transition:.2s ease;
+}
+
+.collapse-head.open .chev{
+  transform:rotate(90deg);
+}
+
+.collapse-title{
+  flex:1;
+  font-size:12.5px;
+  font-weight:600;
+}
+
+.collapse-body{
+  padding:0 0 4px 19px;
+}
+
+.collapse-body[hidden]{
+  display:none;
+}
+
+.color-swatch-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.color-swatch-btn{
+  width:34px;
+  height:30px;
+  border:1px solid var(--border-strong);
+  border-radius:6px;
+  background:var(--panel);
+  padding:0;
+}
+
+.curve-preview-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6px;
+}
+
+.curve-preview-btn{
+  height:40px;
+  padding:0;
+  border:1px solid var(--border-strong);
+  border-radius:7px;
+  background:var(--panel);
+  color:var(--ink);
+  font-size:12px;
+}
+
+.curve-preview-btn.active{
+  border-color:var(--accent);
+  background:var(--accent-soft);
+  color:var(--accent);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1100px){
+
+  .app{
+    grid-template-columns:
+      70px
+      230px
+      minmax(350px,1fr)
+      280px;
+  }
+
+  .rail{
+    width:70px;
+  }
+
+  .rail-panel{
+    width:230px;
+  }
+
+}
+
+@media(max-width:900px){
+
+  body{
+    overflow:auto;
+  }
+
+  .app{
+    display:flex;
+    flex-direction:column;
+    min-height:calc(100vh - 64px);
+  }
+
+  .rail{
+    width:100%;
+    height:62px;
+    flex-direction:row;
+    overflow-x:auto;
+    border-right:none;
+    border-bottom:1px solid var(--border);
+  }
+
+  .rail-btn{
+    min-width:66px;
+  }
+
+  .rail-panel{
+    width:100%;
+    max-height:350px;
+    border-right:none;
+    border-bottom:1px solid var(--border);
+  }
+
+  .workspace{
+    min-height:600px;
+  }
+
+  .inspector{
+    width:100%;
+    border-left:none;
+    border-top:1px solid var(--border);
+  }
+
+  canvas{
+    max-width:80vw;
+    max-height:60vh;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar-global">
+
+  <div class="brand">MIXIT</div>
+
+  <div
+    class="header-crumb mono"
+    id="crumbLabel"
+  >
+    1:1 · 1080×1080
+  </div>
+
+  <div class="header-actions">
+
+    <button
+      type="button"
+      class="btn"
+      id="downloadJpgBtn"
+    >
+      JPEG 내려받기
+    </button>
+
+    <button
+      type="button"
+      class="btn primary"
+      id="downloadPngBtn"
+    >
+      PNG 내려받기
+    </button>
+
+  </div>
+
+</header>
+
+
+<div class="app">
+
+<!-- =========================================================
+     LEFT RAIL
+========================================================= -->
+
+<nav
+  class="rail"
+  id="rail"
+>
+
+  <button
+    type="button"
+    class="rail-btn active"
+    data-tab="aspect"
+  >
+
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+    >
+      <rect
+        x="4"
+        y="4"
+        width="16"
+        height="16"
+        rx="2"
+      ></rect>
+    </svg>
+
+    <span>화면비</span>
+
+  </button>
+
+
+  <button
+    type="button"
+    class="rail-btn"
+    data-tab="image"
+  >
+
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+    >
+
+      <rect
+        x="3"
+        y="3"
+        width="18"
+        height="18"
+        rx="2"
+      ></rect>
+
+      <circle
+        cx="8.5"
+        cy="8.5"
+        r="1.5"
+      ></circle>
+
+      <path
+        d="M21 15l-5-5L5 21"
+      ></path>
+
+    </svg>
+
+    <span>이미지</span>
+
+  </button>
+
+
+  <button
+    type="button"
+    class="rail-btn"
+    data-tab="sticker"
+  >
+
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+    >
+
+      <path
+        d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01z"
+      ></path>
+
+    </svg>
+
+    <span>스티커</span>
+
+  </button>
+
+
+  <button
+    type="button"
+    class="rail-btn"
+    data-tab="layers"
+  >
+
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+    >
+
+      <rect
+        x="4"
+        y="4"
+        width="16"
+        height="4"
+        rx="1"
+      ></rect>
+
+      <rect
+        x="4"
+        y="10"
+        width="16"
+        height="4"
+        rx="1"
+      ></rect>
+
+      <rect
+        x="4"
+        y="16"
+        width="16"
+        height="4"
+        rx="1"
+      ></rect>
+
+    </svg>
+
+    <span>레이어</span>
+
+  </button>
+
+
+  <button
+    type="button"
+    class="rail-btn"
+    data-tab="template"
+  >
+
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+    >
+
+      <rect
+        x="3"
+        y="3"
+        width="7"
+        height="7"
+        rx="1"
+      ></rect>
+
+      <rect
+        x="14"
+        y="3"
+        width="7"
+        height="7"
+        rx="1"
+      ></rect>
+
+      <rect
+        x="3"
+        y="14"
+        width="7"
+        height="7"
+        rx="1"
+      ></rect>
+
+      <rect
+        x="14"
+        y="14"
+        width="7"
+        height="7"
+        rx="1"
+      ></rect>
+
+    </svg>
+
+    <span>템플릿</span>
+
+  </button>
+
+</nav>
+
+
+<!-- =========================================================
+     LEFT PANEL
+========================================================= -->
+
+<div class="rail-panel">
+
+
+  <!-- ASPECT -->
+
+  <section
+    class="tab-content"
+    data-tab-content="aspect"
+  >
+
+    <h3>화면비</h3>
+
+    <p class="desc">
+      카드와 SNS에 맞는 캔버스 비율을 선택하세요.
+    </p>
+
+
+    <div
+      class="size-cards"
+      id="aspectCards"
+    >
+
+      <button
+        type="button"
+        class="size-card active"
+        data-aspect="1:1"
+      >
+
+        <div
+          class="swatch"
+          style="aspect-ratio:1/1;"
+        ></div>
+
+        <span>
+
+          <span class="card-label">
+            1:1
+          </span>
+
+          <br>
+
+          <span class="card-sub mono">
+            1080×1080
+          </span>
+
+        </span>
+
+      </button>
+
+
+      <button
+        type="button"
+        class="size-card"
+        data-aspect="4:5"
+      >
+
+        <div
+          class="swatch"
+          style="aspect-ratio:4/5;"
+        ></div>
+
+        <span>
+
+          <span class="card-label">
+            4:5
+          </span>
+
+          <br>
+
+          <span class="card-sub mono">
+            1080×1350
+          </span>
+
+        </span>
+
+      </button>
+
+
+      <button
+        type="button"
+        class="size-card"
+        data-aspect="9:16"
+      >
+
+        <div
+          class="swatch"
+          style="aspect-ratio:9/16;"
+        ></div>
+
+        <span>
+
+          <span class="card-label">
+            9:16
+          </span>
+
+          <br>
+
+          <span class="card-sub mono">
+            1080×1920
+          </span>
+
+        </span>
+
+      </button>
+
+    </div>
+
+
+    <h3 style="margin-top:20px;">배경</h3>
+
+    <p class="desc">
+      캔버스 자체의 배경을 정하세요. 빈 캔버스로 두면 PNG는 투명하게 저장돼요.
+    </p>
+
+    <div class="size-cards" id="bgModeCards">
+
+      <button
+        type="button"
+        class="size-card"
+        data-bg-mode="transparent"
+      >
+        <span class="card-label">빈 캔버스</span>
+        <span class="card-sub mono">투명</span>
+      </button>
+
+      <button
+        type="button"
+        class="size-card active"
+        data-bg-mode="color"
+      >
+        <span class="card-label">단색</span>
+        <span class="card-sub mono" id="bgColorLabel">#FFFFFF</span>
+      </button>
+
+    </div>
+
+    <div class="field" style="margin-top:10px;">
+      <label>배경 색상</label>
+      <input type="color" id="bgColorInput" value="#ffffff">
+    </div>
+
+  </section>
+
+
+  <!-- IMAGE -->
+
+  <section
+    class="tab-content"
+    data-tab-content="image"
+    hidden
+  >
+
+    <h3>이미지</h3>
+
+    <p class="desc">
+      이미지를 추가하면 새로운 이미지 레이어로 캔버스에 표시됩니다.
+    </p>
+
+
+    <label
+      class="upload-box"
+      for="imageFileInput"
+    >
+
+      ＋ 이미지 업로드
+
+      <br>
+
+      <span class="mono">
+        PNG · JPEG · WEBP
+      </span>
+
+    </label>
+
+
+    <input
+      type="file"
+      id="imageFileInput"
+      accept="image/png,image/jpeg,image/webp"
+      multiple
+    >
+
+
+    <div
+      class="asset-grid"
+      id="imageAssetGrid"
+    ></div>
+
+
+    <div
+      class="msg"
+      id="imgMsg"
+    ></div>
+
+  </section>
+
+
+  <!-- STICKER -->
+
+  <section
+    class="tab-content"
+    data-tab-content="sticker"
+    hidden
+  >
+
+    <h3>스티커</h3>
+
+    <p class="desc">
+      테스트용 기본 스티커입니다.
+      나중에 PNG 스티커를 추가할 수 있습니다.
+    </p>
+
+
+    <div
+      class="asset-grid"
+      id="stickerAssetGrid"
+    ></div>
+
+  </section>
+
+
+  <!-- LAYERS -->
+
+  <section
+    class="tab-content"
+    data-tab-content="layers"
+    hidden
+  >
+
+    <div class="layer-heading">
+
+      <h3>
+
+        레이어
+
+        <span
+          class="layer-count mono"
+          id="layerCount"
+        >
+          (1)
+        </span>
+
+      </h3>
+
+    </div>
+
+
+    <p class="desc">
+      위쪽에 있을수록 캔버스에서 앞에 표시됩니다.
+    </p>
+
+
+    <div
+      class="layer-list"
+      id="leftLayerList"
+    ></div>
+
+
+    <div class="layer-bottom">
+
+      <button
+        type="button"
+        class="btn small"
+        id="leftAddTextBtn"
+        style="flex:1;"
+      >
+        ＋ 문구
+      </button>
+
+
+      <button
+        type="button"
+        class="btn small"
+        id="leftAddImageBtn"
+        style="flex:1;"
+      >
+        ＋ 이미지
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- TEMPLATE -->
+
+  <section
+    class="tab-content"
+    data-tab-content="template"
+    hidden
+  >
+
+    <h3>
+      내 템플릿
+    </h3>
+
+
+    <div class="template-toolbar">
+
+      <input
+        type="text"
+        id="templateNameInput"
+        placeholder="템플릿 이름"
+      >
+
+
+      <button
+        type="button"
+        class="btn small primary"
+        id="saveTemplateBtn"
+      >
+        저장
+      </button>
+
+    </div>
+
+
+    <div
+      class="msg"
+      id="templateMsg"
+    ></div>
+
+
+    <div
+      class="template-list"
+      id="templateGrid"
+    ></div>
+
+
+    <div class="json-actions">
+
+      <button
+        type="button"
+        class="btn small ghost"
+        id="exportJsonBtn"
+      >
+        JSON 내보내기
+      </button>
+
+
+      <button
+        type="button"
+        class="btn small ghost"
+        id="importJsonBtn"
+      >
+        JSON 가져오기
+      </button>
+
+
+      <input
+        type="file"
+        id="jsonInput"
+        accept="application/json"
+      >
+
+    </div>
+
+  </section>
+
+</div>
+
+
+<!-- =========================================================
+     WORKSPACE
+========================================================= -->
+
+<main class="workspace">
+
+  <div
+    class="context-toolbar"
+    id="contextToolbar"
+  >
+
+    <button
+      type="button"
+      class="tool-btn"
+      id="toolbarDuplicate"
+    >
+      ⧉ 복제
+    </button>
+
+
+    <div class="separator"></div>
+
+
+    <button
+      type="button"
+      class="tool-btn"
+      id="toolbarBack"
+    >
+      ▾ 뒤로
+    </button>
+
+
+    <button
+      type="button"
+      class="tool-btn"
+      id="toolbarFront"
+    >
+      ▴ 앞으로
+    </button>
+
+
+    <div class="separator"></div>
+
+
+    <button
+      type="button"
+      class="tool-btn"
+      id="toolbarDelete"
+    >
+      삭제
+    </button>
+
+  </div>
+
+
+  <div class="canvas-area">
+
+    <div
+      class="canvas-frame"
+      id="canvasFrame"
+    >
+
+      <canvas
+        id="mainCanvas"
+      ></canvas>
+
+
+      <div
+        class="selection-box"
+        id="selectionBox"
+      >
+
+        <div
+          class="selection-handle handle-nw"
+          data-handle="nw"
+        ></div>
+
+        <div
+          class="selection-handle handle-n"
+          data-handle="n"
+        ></div>
+
+        <div
+          class="selection-handle handle-ne"
+          data-handle="ne"
+        ></div>
+
+        <div
+          class="selection-handle handle-e"
+          data-handle="e"
+        ></div>
+
+        <div
+          class="selection-handle handle-se"
+          data-handle="se"
+        ></div>
+
+        <div
+          class="selection-handle handle-s"
+          data-handle="s"
+        ></div>
+
+        <div
+          class="selection-handle handle-sw"
+          data-handle="sw"
+        ></div>
+
+        <div
+          class="selection-handle handle-w"
+          data-handle="w"
+        ></div>
+
+
+        <div class="rotation-line"></div>
+
+
+        <div
+          class="rotation-handle"
+          id="rotationHandle"
+        ></div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</main>
+
+
+<!-- =========================================================
+     RIGHT INSPECTOR
+========================================================= -->
+
+<aside class="inspector">
+
+  <div class="inspector-title">
+    속성
+  </div>
+
+
+  <div class="pin-add-row">
+
+    <button
+      type="button"
+      class="pin-add-btn"
+      id="pinAddTextBtn"
+      title="문구 추가"
+    >
+      <span class="pin-add-icon">＋</span>
+      문구
+    </button>
+
+    <button
+      type="button"
+      class="pin-add-btn"
+      id="pinAddImageBtn"
+      title="이미지 추가"
+    >
+      <span class="pin-add-icon">＋</span>
+      이미지
+    </button>
+
+    <button
+      type="button"
+      class="pin-add-btn"
+      id="pinAddStickerBtn"
+      title="스티커 추가"
+    >
+      <span class="pin-add-icon">＋</span>
+      스티커
+    </button>
+
+  </div>
+
+
+  <section
+    id="emptyInspector"
+    class="empty-state"
+  >
+
+    선택된 요소가 없어요.<br>
+    캔버스의 객체 또는 왼쪽 레이어를<br>
+    선택해보세요.
+
+  </section>
+
+
+  <section
+    id="objectHeader"
+    class="object-header"
+    style="display:none;"
+  >
+
+    <div
+      class="object-icon"
+      id="objectIcon"
+    >
+      T
+    </div>
+
+
+    <div class="object-info">
+
+      <strong
+        id="objectTitle"
+      >
+        텍스트
+      </strong>
+
+
+      <span
+        id="objectSubtitle"
+      >
+        선택한 객체
+      </span>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       IMAGE INSPECTOR
+  ====================================================== -->
+
+  <section
+    class="insp-block"
+    id="panel-image"
+    style="display:none;"
+  >
+
+    <h4>
+      이미지 속성
+    </h4>
+
+
+    <img
+      id="inspectorImagePreview"
+      class="image-preview"
+      alt=""
+    >
+
+
+    <div class="field">
+
+      <label>
+        이미지 이름
+      </label>
+
+
+      <div
+        class="dim small"
+        id="inspectorImageName"
+      >
+        -
+      </div>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        배율
+      </label>
+
+
+      <div class="row">
+
+        <input
+          type="range"
+          id="imageScaleRange"
+          min="10"
+          max="300"
+          value="100"
+        >
+
+
+        <span
+          class="val mono"
+          id="imageScaleVal"
+        >
+          100%
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="quick-actions">
+
+      <button
+        type="button"
+        class="btn small"
+        id="imageFillBtn"
+      >
+        화면 채우기
+      </button>
+
+
+      <button
+        type="button"
+        class="btn small"
+        id="imageResetBtn"
+      >
+        원본 초기화
+      </button>
+
+    </div>
+
+
+    <div style="height:14px;"></div>
+
+
+    <div class="field">
+
+      <label>
+        밝기
+      </label>
+
+
+      <div class="row">
+
+        <input
+          type="range"
+          id="brightnessRange"
+          min="0"
+          max="200"
+          value="100"
+        >
+
+
+        <span
+          class="val mono"
+          id="brightnessVal"
+        >
+          100%
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        대비
+      </label>
+
+
+      <div class="row">
+
+        <input
+          type="range"
+          id="contrastRange"
+          min="0"
+          max="200"
+          value="100"
+        >
+
+
+        <span
+          class="val mono"
+          id="contrastVal"
+        >
+          100%
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        채도
+      </label>
+
+
+      <div class="row">
+
+        <input
+          type="range"
+          id="saturationRange"
+          min="0"
+          max="200"
+          value="100"
+        >
+
+
+        <span
+          class="val mono"
+          id="saturationVal"
+        >
+          100%
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        블러
+      </label>
+
+
+      <div class="row">
+
+        <input
+          type="range"
+          id="blurRange"
+          min="0"
+          max="20"
+          value="0"
+        >
+
+
+        <span
+          class="val mono"
+          id="blurVal"
+        >
+          0
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        투명도
+      </label>
+
+
+      <div class="row">
+
+        <input
+          type="range"
+          id="imageOpacityRange"
+          min="0"
+          max="100"
+          value="100"
+        >
+
+
+        <span
+          class="val mono"
+          id="imageOpacityVal"
+        >
+          100%
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        회전
+      </label>
+
+
+      <div class="row">
+
+        <input
+          type="range"
+          id="imageRotationRange"
+          min="-180"
+          max="180"
+          value="0"
+        >
+
+
+        <span
+          class="val mono"
+          id="imageRotationVal"
+        >
+          0°
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        위치
+      </label>
+
+
+      <div class="two-col">
+
+        <input
+          class="number-input"
+          type="number"
+          id="imageXInput"
+          min="0"
+          max="100"
+          step="0.1"
+          placeholder="X"
+        >
+
+
+        <input
+          class="number-input"
+          type="number"
+          id="imageYInput"
+          min="0"
+          max="100"
+          step="0.1"
+          placeholder="Y"
+        >
+
+      </div>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        크기
+      </label>
+
+
+      <div class="two-col">
+
+        <input
+          class="number-input"
+          type="number"
+          id="imageWidthInput"
+          min="1"
+          max="300"
+          step="0.1"
+          placeholder="너비"
+        >
+
+
+        <input
+          class="number-input"
+          type="number"
+          id="imageHeightInput"
+          min="1"
+          max="300"
+          step="0.1"
+          placeholder="높이"
+        >
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       TEXT INSPECTOR
+  ====================================================== -->
+
+  <section
+    class="insp-block"
+    id="panel-text"
+    style="display:none;"
+  >
+
+    <h4>
+      텍스트 속성
+    </h4>
+
+
+    <div class="field">
+
+      <label>
+        내용
+      </label>
+
+
+      <textarea
+        id="textInput"
+        placeholder="문구를 입력하세요"
+      ></textarea>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        글꼴
+      </label>
+
+
+      <select
+        id="fontSelect"
+      >
+
+        <option value="'Noto Sans KR', sans-serif">
+          기본 고딕
+        </option>
+
+        <option value="'Black Han Sans', sans-serif">
+          임팩트체
+        </option>
+
+        <option value="'Do Hyeon', sans-serif">
+          라운드 고딕
+        </option>
+
+        <option value="'Nanum Myeongjo', serif">
+          명조체
+        </option>
+
+        <option value="'Gaegu', sans-serif">
+          손글씨
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        폰트 크기
+      </label>
+
+
+      <div class="row">
+
+        <input
+          type="range"
+          id="textSizeRange"
+          min="16"
+          max="220"
+          value="60"
+        >
+
+
+        <input
+          type="number"
+          class="val-input mono"
+          id="textSizeInput"
+          min="8"
+          max="500"
+          value="60"
+        >
+
+      </div>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        스타일
+      </label>
+
+
+      <div class="bius-row">
+
+        <button
+          type="button"
+          class="btn small toggle bius-btn"
+          id="boldToggleBtn"
+          title="굵게"
+        >
+          <b>B</b>
+        </button>
+
+
+        <button
+          type="button"
+          class="btn small toggle bius-btn"
+          id="italicToggleBtn"
+          title="기울임"
+        >
+          <i>I</i>
+        </button>
+
+
+        <button
+          type="button"
+          class="btn small toggle bius-btn"
+          id="underlineToggleBtn"
+          title="밑줄"
+        >
+          <u>U</u>
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        색상
+      </label>
+
+
+      <input
+        type="color"
+        id="textColorInput"
+        value="#ffffff"
+      >
+
+    </div>
+
+
+    <!-- OUTLINE -->
+
+    <div class="collapse">
+
+      <div
+        class="collapse-head"
+        data-collapse-target="outlineBody"
+      >
+
+        <span class="chev">
+          ›
+        </span>
+
+
+        <span class="collapse-title">
+          외곽선
+        </span>
+
+
+        <label
+          class="switch"
+          onclick="event.stopPropagation();"
+        >
+
+          <input
+            type="checkbox"
+            id="outlineToggle"
+            checked
+          >
+
+
+          <span class="switch-track"></span>
+
+        </label>
+
+      </div>
+
+
+      <div
+        class="collapse-body"
+        id="outlineBody"
+        hidden
+      >
+
+        <div class="field">
+
+          <label>
+            색상
+          </label>
+
+
+          <input
+            type="color"
+            id="outlineColorInput"
+            value="#000000"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            두께
+          </label>
+
+
+          <div class="row">
+
+            <input
+              type="range"
+              id="outlineRange"
+              min="0"
+              max="20"
+              value="6"
+            >
+
+
+            <span
+              class="val mono"
+              id="outlineVal"
+            >
+              6
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- SHADOW -->
+
+    <div class="collapse">
+
+      <div
+        class="collapse-head"
+        data-collapse-target="shadowBody"
+      >
+
+        <span class="chev">
+          ›
+        </span>
+
+
+        <span class="collapse-title">
+          그림자
+        </span>
+
+
+        <label
+          class="switch"
+          onclick="event.stopPropagation();"
+        >
+
+          <input
+            type="checkbox"
+            id="textShadowToggle"
+          >
+
+
+          <span class="switch-track"></span>
+
+        </label>
+
+      </div>
+
+
+      <div
+        class="collapse-body"
+        id="shadowBody"
+        hidden
+      >
+
+        <div class="field">
+
+          <label>
+            색상
+          </label>
+
+
+          <input
+            type="color"
+            id="shadowColorInput"
+            value="#000000"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            방향
+          </label>
+
+
+          <div class="row">
+
+            <input
+              type="range"
+              id="shadowAngleRange"
+              min="0"
+              max="360"
+              value="315"
+            >
+
+
+            <span
+              class="val mono"
+              id="shadowAngleVal"
+            >
+              315°
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            불투명도
+          </label>
+
+
+          <div class="row">
+
+            <input
+              type="range"
+              id="shadowOpacityRange"
+              min="0"
+              max="100"
+              value="40"
+            >
+
+
+            <span
+              class="val mono"
+              id="shadowOpacityVal"
+            >
+              40%
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            거리
+          </label>
+
+
+          <div class="row">
+
+            <input
+              type="range"
+              id="shadowDistanceRange"
+              min="0"
+              max="60"
+              value="10"
+            >
+
+
+            <span
+              class="val mono"
+              id="shadowDistanceVal"
+            >
+              10
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            흐림
+          </label>
+
+
+          <div class="row">
+
+            <input
+              type="range"
+              id="shadowBlurRange"
+              min="0"
+              max="40"
+              value="11"
+            >
+
+
+            <span
+              class="val mono"
+              id="shadowBlurVal"
+            >
+              11
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- CURVE -->
+
+    <div class="collapse">
+
+      <div
+        class="collapse-head"
+        data-collapse-target="curveBody"
+      >
+
+        <span class="chev">
+          ›
+        </span>
+
+
+        <span class="collapse-title">
+          곡선
+        </span>
+
+
+        <label
+          class="switch"
+          onclick="event.stopPropagation();"
+        >
+
+          <input
+            type="checkbox"
+            id="curveToggle"
+          >
+
+
+          <span class="switch-track"></span>
+
+        </label>
+
+      </div>
+
+
+      <div
+        class="collapse-body"
+        id="curveBody"
+        hidden
+      >
+
+        <div class="field">
+
+          <label>
+            방향
+          </label>
+
+
+          <div class="curve-preview-row">
+
+            <button
+              type="button"
+              class="curve-preview-btn toggle active"
+              id="curveNormalBtn"
+            >
+              ABCD
+            </button>
+
+
+            <button
+              type="button"
+              class="curve-preview-btn toggle"
+              id="curveFlipBtn"
+            >
+              A<sub>BCD</sub>
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- VERTICAL -->
+
+    <div class="collapse">
+
+      <div
+        class="collapse-head"
+        style="cursor:default;"
+      >
+
+        <span
+          class="chev"
+          style="visibility:hidden;"
+        >
+          ›
+        </span>
+
+
+        <span class="collapse-title">
+          세로 쓰기
+        </span>
+
+
+        <label class="switch">
+
+          <input
+            type="checkbox"
+            id="verticalToggle"
+          >
+
+
+          <span class="switch-track"></span>
+
+        </label>
+
+      </div>
+
+    </div>
+
+
+    <!-- OPACITY -->
+
+    <div class="field">
+
+      <label>
+        투명도
+      </label>
+
+
+      <div class="row">
+
+        <input
+          type="range"
+          id="textOpacityRange"
+          min="0"
+          max="100"
+          value="100"
+        >
+
+
+        <span
+          class="val mono"
+          id="textOpacityVal"
+        >
+          100%
+        </span>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       STICKER INSPECTOR
+  ====================================================== -->
+
+  <section
+    class="insp-block"
+    id="panel-sticker"
+    style="display:none;"
+  >
+
+    <h4>
+      스티커 속성
+    </h4>
+
+
+    <div class="field">
+
+      <label>
+        크기
+      </label>
+
+
+      <div class="row">
+
+        <input
+          type="range"
+          id="stickerSizeRange"
+          min="20"
+          max="600"
+          value="180"
+        >
+
+
+        <span
+          class="val mono"
+          id="stickerSizeVal"
+        >
+          180
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        회전
+      </label>
+
+
+      <div class="row">
+
+        <input
+          type="range"
+          id="stickerRotationRange"
+          min="-180"
+          max="180"
+          value="0"
+        >
+
+
+        <span
+          class="val mono"
+          id="stickerRotationVal"
+        >
+          0°
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        투명도
+      </label>
+
+
+      <div class="row">
+
+        <input
+          type="range"
+          id="stickerOpacityRange"
+          min="0"
+          max="100"
+          value="100"
+        >
+
+
+        <span
+          class="val mono"
+          id="stickerOpacityVal"
+        >
+          100%
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="field">
+
+      <label class="check-row">
+
+        <input
+          type="checkbox"
+          id="stickerShadowToggle"
+          checked
+        >
+
+        그림자
+
+      </label>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        뒤집기
+      </label>
+
+
+      <div class="quick-actions">
+
+        <button
+          type="button"
+          class="btn small"
+          id="flipHorizontalBtn"
+        >
+          ↔ 가로
+        </button>
+
+
+        <button
+          type="button"
+          class="btn small"
+          id="flipVerticalBtn"
+        >
+          ↕ 세로
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       COMMON TRANSFORM
+  ====================================================== -->
+
+  <section
+    class="insp-block"
+    id="panel-transform"
+    style="display:none;"
+  >
+
+    <h4>
+      위치
+    </h4>
+
+
+    <div class="field">
+
+      <label>
+        가로 위치
+      </label>
+
+
+      <div class="row">
+
+        <input
+          type="range"
+          id="objectXRange"
+          min="0"
+          max="100"
+          value="50"
+          step="0.1"
+        >
+
+
+        <span
+          class="val mono"
+          id="objectXVal"
+        >
+          50%
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        세로 위치
+      </label>
+
+
+      <div class="row">
+
+        <input
+          type="range"
+          id="objectYRange"
+          min="0"
+          max="100"
+          value="50"
+          step="0.1"
+        >
+
+
+        <span
+          class="val mono"
+          id="objectYVal"
+        >
+          50%
+        </span>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</aside>
+
+</div>
+
+
+<script>
+(function(){
+
+"use strict";
+
+
+/* =========================================================
+   CONSTANTS
+========================================================= */
+
+const ASPECTS = {
+  "1:1": {
+    w:1080,
+    h:1080
+  },
+
+  "4:5": {
+    w:1080,
+    h:1350
+  },
+
+  "9:16": {
+    w:1080,
+    h:1920
+  }
+};
+
+
+const STORAGE_KEY =
+  "mixit_templates_text_clean_v1";
+
+
+/* =========================================================
+   TEST STICKERS
+========================================================= */
+
+const TEST_STICKERS = [
+  {name:"웃음",emoji:"😂"},
+  {name:"눈물",emoji:"😭"},
+  {name:"불꽃",emoji:"🔥"},
+  {name:"하트",emoji:"❤️"},
+  {name:"엄지",emoji:"👍"},
+  {name:"백점",emoji:"💯"},
+  {name:"별",emoji:"⭐"},
+  {name:"안경",emoji:"😎"},
+  {name:"반짝",emoji:"✨"},
+  {name:"느낌표",emoji:"❗"}
+];
+
+
+/* =========================================================
+   FUTURE ASSETS
+========================================================= */
+
+const ASSET_MANIFEST = {
+
+  images:[
+    /*
+      예:
+
+      {
+        name:"배경 01",
+        src:"assets/images/background01.jpg"
+      }
+    */
+  ],
+
+  stickers:[
+    /*
+      예:
+
+      {
+        name:"불꽃",
+        src:"assets/stickers/fire.png"
+      }
+    */
+  ]
+
+};
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+const state = {
+
+  aspect:"1:1",
+
+  elements:[],
+
+  selectedId:null,
+
+  nextZ:1,
+
+  background:{
+
+    mode:"color",
+
+    color:"#FFFFFF"
+
+  }
+
+};
+
+
+/* =========================================================
+   DOM
+========================================================= */
+
+const $ =
+  id =>
+    document.getElementById(id);
+
+
+const canvas =
+  $("mainCanvas");
+
+
+const canvasFrame =
+  $("canvasFrame");
+
+
+const selectionBox =
+  $("selectionBox");
+
+
+const rotationHandle =
+  $("rotationHandle");
+
+
+const contextToolbar =
+  $("contextToolbar");
+
+
+const layerList =
+  $("leftLayerList");
+
+
+const layerCount =
+  $("layerCount");
+
+
+const crumbLabel =
+  $("crumbLabel");
+
+
+const emptyInspector =
+  $("emptyInspector");
+
+
+const objectHeader =
+  $("objectHeader");
+
+
+const objectIcon =
+  $("objectIcon");
+
+
+const objectTitle =
+  $("objectTitle");
+
+
+const objectSubtitle =
+  $("objectSubtitle");
+
+
+const panelImage =
+  $("panel-image");
+
+
+const panelText =
+  $("panel-text");
+
+
+const panelSticker =
+  $("panel-sticker");
+
+
+const panelTransform =
+  $("panel-transform");
+
+
+const imageAssetGrid =
+  $("imageAssetGrid");
+
+
+const stickerAssetGrid =
+  $("stickerAssetGrid");
+
+
+const imageFileInput =
+  $("imageFileInput");
+
+
+const imgMsg =
+  $("imgMsg");
+
+
+const templateGrid =
+  $("templateGrid");
+
+
+const templateMsg =
+  $("templateMsg");
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function uid(prefix){
+
+  return (
+    prefix +
+    "_" +
+    Date.now().toString(36) +
+    "_" +
+    Math.random()
+      .toString(36)
+      .slice(2,8)
+  );
+
+}
+
+
+function getSelected(){
+
+  return (
+    state.elements.find(
+      element =>
+        element.id ===
+        state.selectedId
+    ) || null
+  );
+
+}
+
+
+function getDims(){
+
+  return ASPECTS[
+    state.aspect
+  ];
+
+}
+
+
+function clamp(
+  value,
+  min,
+  max
+){
+
+  return Math.max(
+    min,
+    Math.min(
+      max,
+      value
+    )
+  );
+
+}
+
+
+function degToRad(
+  deg
+){
+
+  return (
+    deg *
+    Math.PI /
+    180
+  );
+
+}
+
+
+function hexToRgba(
+  hex,
+  opacityPercent
+){
+
+  let clean =
+    String(
+      hex ||
+      "#000000"
+    ).replace(
+      "#",
+      ""
+    );
+
+
+  if(
+    clean.length === 3
+  ){
+
+    clean =
+      clean
+        .split("")
+        .map(
+          ch =>
+            ch + ch
+        )
+        .join("");
+
+  }
+
+
+  const r =
+    parseInt(
+      clean.substring(0,2),
+      16
+    ) || 0;
+
+
+  const g =
+    parseInt(
+      clean.substring(2,4),
+      16
+    ) || 0;
+
+
+  const b =
+    parseInt(
+      clean.substring(4,6),
+      16
+    ) || 0;
+
+
+  const a =
+    clamp(
+      (
+        opacityPercent ??
+        100
+      ) / 100,
+      0,
+      1
+    );
+
+
+  return (
+    "rgba(" +
+    r +
+    "," +
+    g +
+    "," +
+    b +
+    "," +
+    a +
+    ")"
+  );
+
+}
+
+
+function showMsg(
+  element,
+  text,
+  type
+){
+
+  if(!element){
+    return;
+  }
+
+
+  element.textContent =
+    text;
+
+
+  element.className =
+    "msg " +
+    type;
+
+
+  element.style.display =
+    "block";
+
+}
+
+
+function clearMsg(
+  element
+){
+
+  if(!element){
+    return;
+  }
+
+
+  element.textContent =
+    "";
+
+
+  element.style.display =
+    "none";
+
+}
+
+
+function updateRangeFill(
+  input
+){
+
+  if(
+    !input ||
+    input.type !== "range"
+  ){
+
+    return;
+
+  }
+
+
+  const min =
+    Number(
+      input.min || 0
+    );
+
+
+  const max =
+    Number(
+      input.max || 100
+    );
+
+
+  const val =
+    Number(
+      input.value
+    );
+
+
+  const pct =
+    max > min
+      ? (
+          (val - min) /
+          (max - min)
+        ) * 100
+      : 0;
+
+
+  input.style.setProperty(
+    "--range-pct",
+    pct + "%"
+  );
+
+}
+
+
+function refreshAllRangeFills(){
+
+  document
+    .querySelectorAll(
+      'input[type=range]'
+    )
+    .forEach(
+      updateRangeFill
+    );
+
+}
+
+
+document.addEventListener(
+  "input",
+  function(e){
+
+    if(
+      e.target &&
+      e.target.tagName === "INPUT" &&
+      e.target.type === "range"
+    ){
+
+      updateRangeFill(
+        e.target
+      );
+
+    }
+
+  }
+);
+
+
+function setRange(
+  inputId,
+  valueId,
+  value,
+  suffix
+){
+
+  const input =
+    $(inputId);
+
+
+  const output =
+    $(valueId);
+
+
+  if(
+    !input ||
+    !output
+  ){
+
+    return;
+
+  }
+
+
+  input.value =
+    value;
+
+
+  updateRangeFill(
+    input
+  );
+
+
+  output.textContent =
+    value +
+    suffix;
+
+}
+
+
+/* =========================================================
+   COLLAPSE
+========================================================= */
+
+function syncCollapseVisual(
+  checkboxId,
+  bodyId
+){
+
+  const checkbox =
+    $(checkboxId);
+
+
+  const body =
+    $(bodyId);
+
+
+  const head =
+    document.querySelector(
+      '[data-collapse-target="' +
+      bodyId +
+      '"]'
+    );
+
+
+  if(
+    !checkbox ||
+    !body
+  ){
+
+    return;
+
+  }
+
+
+  body.hidden =
+    !checkbox.checked;
+
+
+  if(head){
+
+    head.classList.toggle(
+      "open",
+      checkbox.checked
+    );
+
+  }
+
+}
+
+
+function bindCollapseToggle(
+  checkboxId,
+  bodyId
+){
+
+  const checkbox =
+    $(checkboxId);
+
+
+  const head =
+    document.querySelector(
+      '[data-collapse-target="' +
+      bodyId +
+      '"]'
+    );
+
+
+  if(
+    !checkbox ||
+    !head
+  ){
+
+    return;
+
+  }
+
+
+  syncCollapseVisual(
+    checkboxId,
+    bodyId
+  );
+
+
+  checkbox.addEventListener(
+    "change",
+    function(){
+
+      syncCollapseVisual(
+        checkboxId,
+        bodyId
+      );
+
+    }
+  );
+
+
+  head.addEventListener(
+    "click",
+    function(event){
+
+      if(
+        event.target.closest(
+          ".switch"
+        )
+      ){
+
+        return;
+
+      }
+
+
+      checkbox.checked =
+        !checkbox.checked;
+
+
+      checkbox.dispatchEvent(
+        new Event(
+          "change"
+        )
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   TABS
+========================================================= */
+
+const railButtons =
+  Array.from(
+    document.querySelectorAll(
+      ".rail-btn"
+    )
+  );
+
+
+const tabPanels =
+  Array.from(
+    document.querySelectorAll(
+      ".tab-content"
+    )
+  );
+
+
+function activateTab(
+  tabName
+){
+
+  railButtons.forEach(
+    button=>{
+
+      button.classList.toggle(
+        "active",
+        button.dataset.tab ===
+        tabName
+      );
+
+    }
+  );
+
+
+  tabPanels.forEach(
+    panel=>{
+
+      panel.hidden =
+        panel.dataset.tabContent !==
+        tabName;
+
+    }
+  );
+
+
+  if(
+    tabName ===
+    "layers"
+  ){
+
+    renderLayers();
+
+  }
+
+
+  if(
+    tabName ===
+    "image"
+  ){
+
+    renderImageAssets();
+
+  }
+
+
+  if(
+    tabName ===
+    "sticker"
+  ){
+
+    renderStickerAssets();
+
+  }
+
+}
+
+
+railButtons.forEach(
+  button=>{
+
+    button.addEventListener(
+      "click",
+      function(event){
+
+        event.preventDefault();
+
+        event.stopPropagation();
+
+        activateTab(
+          this.dataset.tab
+        );
+
+      }
+    );
+
+  });
+
+
+/* =========================================================
+   TEXT UTILITIES
+========================================================= */
+
+function graphemes(
+  text
+){
+
+  if(
+    typeof Intl !==
+      "undefined" &&
+    Intl.Segmenter
+  ){
+
+    try{
+
+      const segmenter =
+        new Intl.Segmenter(
+          "ko",
+          {
+            granularity:
+              "grapheme"
+          }
+        );
+
+
+      return Array.from(
+        segmenter.segment(
+          text
+        ),
+        item =>
+          item.segment
+      );
+
+    }catch(error){}
+
+  }
+
+
+  return Array.from(
+    String(text)
+  );
+
+}
+
+
+function wrapLines(
+  ctx,
+  text,
+  maxWidth
+){
+
+  const paragraphs =
+    String(
+      text
+    ).split(
+      "\n"
+    );
+
+
+  const lines=[];
+
+
+  paragraphs.forEach(
+    paragraph=>{
+
+      if(
+        paragraph === ""
+      ){
+
+        lines.push("");
+
+        return;
+
+      }
+
+
+      const chars =
+        graphemes(
+          paragraph
+        );
+
+
+      let current =
+        "";
+
+
+      chars.forEach(
+        char=>{
+
+          const test =
+            current +
+            char;
+
+
+          if(
+            ctx.measureText(
+              test
+            ).width >
+              maxWidth &&
+            current
+          ){
+
+            lines.push(
+              current
+            );
+
+
+            current =
+              char;
+
+          }else{
+
+            current =
+              test;
+
+          }
+
+        }
+      );
+
+
+      if(current){
+
+        lines.push(
+          current
+        );
+
+      }
+
+    }
+  );
+
+
+  return lines;
+
+}
+
+
+/* =========================================================
+   DRAW CURVED TEXT
+========================================================= */
+
+function drawCurvedText(
+  ctx,
+  el
+){
+
+  const text =
+    String(
+      el.content ||
+      ""
+    ).replace(
+      /\n/g,
+      " "
+    );
+
+
+  if(!text){
+    return;
+  }
+
+
+  const chars =
+    graphemes(
+      text
+    );
+
+
+  const flip =
+    (
+      el.curveDirection ??
+      1
+    ) < 0;
+
+
+  /*
+    곡선 정도(bendDeg)는 문구 전체가
+    휘어지는 총 각도(도 단위)를 의미함.
+    문구 길이와 무관하게 항상 이 각도
+    안에서만 휘도록 반지름을 역산해서,
+    긴 문구가 과하게 말려 글자가
+    뒤집혀 보이는 문제를 막음.
+  */
+
+  const bendDeg =
+    clamp(
+      Math.abs(
+        Number(
+          el.curve ||
+          45
+        )
+      ),
+      5,
+      150
+    );
+
+
+  const totalAngle =
+    degToRad(
+      bendDeg
+    );
+
+
+  const widths =
+    chars.map(
+      char =>
+        ctx.measureText(
+          char
+        ).width
+    );
+
+
+  const totalWidth =
+    widths.reduce(
+      (sum,width)=>
+        sum +
+        width,
+      0
+    );
+
+
+  const radius =
+    totalWidth /
+    totalAngle;
+
+
+  let theta =
+    -totalAngle / 2;
+
+
+  ctx.save();
+
+
+  chars.forEach(
+    (char,index)=>{
+
+      const width =
+        widths[index];
+
+
+      const charAngle =
+        width /
+        radius;
+
+
+      theta +=
+        charAngle / 2;
+
+
+      /*
+        위치(x,y)와 글자 회전을
+        각각 사인/코사인으로 직접 계산.
+        x는 flip 여부와 상관없이 항상
+        같은 부호로 커지기 때문에
+        글자 순서가 절대 뒤집히지 않음.
+      */
+
+      const x =
+        radius *
+        Math.sin(
+          theta
+        );
+
+
+      const yBase =
+        radius *
+        (
+          1 -
+          Math.cos(
+            theta
+          )
+        );
+
+
+      const y =
+        flip
+          ? -yBase
+          : yBase;
+
+
+      const rotation =
+        flip
+          ? -theta
+          : theta;
+
+
+      ctx.save();
+
+
+      ctx.translate(
+        x,
+        y
+      );
+
+
+      ctx.rotate(
+        rotation
+      );
+
+
+      if(
+        el.outline &&
+        el.outlineWidth > 0
+      ){
+
+        ctx.lineWidth =
+          el.outlineWidth;
+
+
+        ctx.strokeStyle =
+          el.outlineColor ||
+          "#000000";
+
+
+        ctx.lineJoin =
+          "round";
+
+
+        ctx.strokeText(
+          char,
+          0,
+          0
+        );
+
+      }
+
+
+      ctx.fillStyle =
+        el.color ||
+        "#ffffff";
+
+
+      ctx.fillText(
+        char,
+        0,
+        0
+      );
+
+
+      if(
+        el.underline
+      ){
+
+        ctx.strokeStyle =
+          el.color ||
+          "#ffffff";
+
+
+        ctx.lineWidth =
+          Math.max(
+            2,
+            el.size *
+            .06
+          );
+
+
+        ctx.beginPath();
+
+
+        ctx.moveTo(
+          -width/2,
+          el.size*.32
+        );
+
+
+        ctx.lineTo(
+          width/2,
+          el.size*.32
+        );
+
+
+        ctx.stroke();
+
+      }
+
+
+      ctx.restore();
+
+
+      theta +=
+        charAngle / 2;
+
+    }
+  );
+
+
+  ctx.restore();
+
+}
+
+
+/* =========================================================
+   DRAW TEXT
+========================================================= */
+
+function drawText(
+  ctx,
+  el,
+  dims
+){
+
+  ctx.save();
+
+
+  const x =
+    dims.w *
+    el.x /
+    100;
+
+
+  const y =
+    dims.h *
+    el.y /
+    100;
+
+
+  ctx.translate(
+    x,
+    y
+  );
+
+
+  ctx.rotate(
+    degToRad(
+      el.rotation ||
+      0
+    )
+  );
+
+
+  ctx.globalAlpha =
+    (
+      el.opacity ??
+      100
+    ) /
+    100;
+
+
+  const style =
+    el.italic
+      ? "italic "
+      : "";
+
+
+  const weight =
+    el.bold
+      ? "800 "
+      : "400 ";
+
+
+  ctx.font =
+    style +
+    weight +
+    el.size +
+    "px " +
+    (
+      el.fontFamily ||
+      "'Noto Sans KR',sans-serif"
+    );
+
+
+  ctx.textAlign =
+    "center";
+
+
+  ctx.textBaseline =
+    "middle";
+
+
+  /* 그림자 */
+
+  if(el.shadow){
+
+    const angleRad =
+      degToRad(
+        el.shadowAngle ??
+        315
+      );
+
+
+    const distance =
+      el.shadowDistance ??
+      10;
+
+
+    ctx.shadowOffsetX =
+      Math.cos(
+        angleRad
+      ) *
+      distance;
+
+
+    ctx.shadowOffsetY =
+      Math.sin(
+        angleRad
+      ) *
+      distance;
+
+
+    ctx.shadowBlur =
+      el.shadowBlur ??
+      11;
+
+
+    ctx.shadowColor =
+      hexToRgba(
+        el.shadowColor ||
+        "#000000",
+        el.shadowOpacity ??
+        40
+      );
+
+  }else{
+
+    ctx.shadowColor =
+      "transparent";
+
+
+    ctx.shadowBlur =
+      0;
+
+
+    ctx.shadowOffsetX =
+      0;
+
+
+    ctx.shadowOffsetY =
+      0;
+
+  }
+
+
+  /* 세로 쓰기 */
+
+  if(
+    el.vertical
+  ){
+
+    const chars =
+      graphemes(
+        (
+          el.content ||
+          ""
+        ).replace(
+          /[\n ]/g,
+          ""
+        )
+      );
+
+
+    const lineHeight =
+      el.size *
+      1.15;
+
+
+    const totalHeight =
+      chars.length *
+      lineHeight;
+
+
+    const startY =
+      -totalHeight/2 +
+      lineHeight/2;
+
+
+    chars.forEach(
+      (
+        char,
+        index
+      )=>{
+
+        const ty =
+          startY +
+          index *
+          lineHeight;
+
+
+        if(
+          el.outline &&
+          el.outlineWidth > 0
+        ){
+
+          ctx.lineWidth =
+            el.outlineWidth;
+
+
+          ctx.strokeStyle =
+            el.outlineColor ||
+            "#000000";
+
+
+          ctx.lineJoin =
+            "round";
+
+
+          ctx.strokeText(
+            char,
+            0,
+            ty
+          );
+
+        }
+
+
+        ctx.fillStyle =
+          el.color ||
+          "#ffffff";
+
+
+        ctx.fillText(
+          char,
+          0,
+          ty
+        );
+
+
+        if(
+          el.underline
+        ){
+
+          ctx.strokeStyle =
+            el.color ||
+            "#ffffff";
+
+
+          ctx.lineWidth =
+            Math.max(
+              2,
+              el.size*.06
+            );
+
+
+          ctx.beginPath();
+
+
+          ctx.moveTo(
+            0,
+            ty -
+            el.size*.38
+          );
+
+
+          ctx.lineTo(
+            0,
+            ty -
+            el.size*.08
+          );
+
+
+          ctx.stroke();
+
+        }
+
+      }
+    );
+
+  }
+
+
+  /* 곡선 */
+
+  else if(
+    el.curve
+  ){
+
+    drawCurvedText(
+      ctx,
+      el
+    );
+
+  }
+
+
+  /* 일반 */
+
+  else{
+
+    const boxWidth =
+      dims.w*.88;
+
+
+    const lines =
+      wrapLines(
+        ctx,
+        el.content ||
+        "",
+        boxWidth
+      );
+
+
+    const lineHeight =
+      el.size *
+      1.25;
+
+
+    const totalHeight =
+      lines.length *
+      lineHeight;
+
+
+    const startY =
+      -totalHeight/2 +
+      lineHeight/2;
+
+
+    if(
+      el.outline &&
+      el.outlineWidth > 0
+    ){
+
+      ctx.lineWidth =
+        el.outlineWidth;
+
+
+      ctx.strokeStyle =
+        el.outlineColor ||
+        "#000000";
+
+
+      ctx.lineJoin =
+        "round";
+
+
+      lines.forEach(
+        (
+          line,
+          index
+        )=>{
+
+          ctx.strokeText(
+            line,
+            0,
+            startY +
+            index *
+            lineHeight
+          );
+
+        }
+      );
+
+    }
+
+
+    ctx.fillStyle =
+      el.color ||
+      "#ffffff";
+
+
+    lines.forEach(
+      (
+        line,
+        index
+      )=>{
+
+        const ty =
+          startY +
+          index *
+          lineHeight;
+
+
+        ctx.fillText(
+          line,
+          0,
+          ty
+        );
+
+
+        if(
+          el.underline &&
+          line
+        ){
+
+          const width =
+            ctx.measureText(
+              line
+            ).width;
+
+
+          const underlineY =
+            ty +
+            el.size*.32;
+
+
+          ctx.save();
+
+
+          ctx.strokeStyle =
+            el.color ||
+            "#ffffff";
+
+
+          ctx.lineWidth =
+            Math.max(
+              2,
+              el.size*.06
+            );
+
+
+          ctx.beginPath();
+
+
+          ctx.moveTo(
+            -width/2,
+            underlineY
+          );
+
+
+          ctx.lineTo(
+            width/2,
+            underlineY
+          );
+
+
+          ctx.stroke();
+
+
+          ctx.restore();
+
+        }
+
+      }
+    );
+
+  }
+
+
+  ctx.restore();
+
+}
+
+
+/* =========================================================
+   DRAW IMAGE
+========================================================= */
+
+function drawImage(
+  ctx,
+  el,
+  dims
+){
+
+  if(
+    !el.imageEl ||
+    !el.imageEl.complete ||
+    !el.imageEl.naturalWidth
+  ){
+
+    return;
+
+  }
+
+
+  ctx.save();
+
+
+  const x =
+    dims.w *
+    el.x /
+    100;
+
+
+  const y =
+    dims.h *
+    el.y /
+    100;
+
+
+  const width =
+    dims.w *
+    el.width /
+    100;
+
+
+  const height =
+    dims.h *
+    el.height /
+    100;
+
+
+  ctx.translate(
+    x,
+    y
+  );
+
+
+  ctx.rotate(
+    degToRad(
+      el.rotation ||
+      0
+    )
+  );
+
+
+  ctx.globalAlpha =
+    (
+      el.opacity ??
+      100
+    ) /
+    100;
+
+
+  ctx.filter =
+    "brightness(" +
+    (
+      el.brightness ??
+      100
+    ) +
+    "%) " +
+
+    "contrast(" +
+    (
+      el.contrast ??
+      100
+    ) +
+    "%) " +
+
+    "saturate(" +
+    (
+      el.saturation ??
+      100
+    ) +
+    "%) " +
+
+    "blur(" +
+    (
+      el.blur ??
+      0
+    ) +
+    "px)";
+
+
+  const imageRatio =
+    el.imageEl.naturalWidth /
+    el.imageEl.naturalHeight;
+
+
+  if(
+    el.fit ===
+    "cover"
+  ){
+
+    const targetRatio =
+      width /
+      height;
+
+
+    let sourceWidth =
+      el.imageEl.naturalWidth;
+
+
+    let sourceHeight =
+      el.imageEl.naturalHeight;
+
+
+    let sourceX=0;
+
+
+    let sourceY=0;
+
+
+    if(
+      imageRatio >
+      targetRatio
+    ){
+
+      sourceWidth =
+        el.imageEl.naturalHeight *
+        targetRatio;
+
+
+      sourceX =
+        (
+          el.imageEl.naturalWidth -
+          sourceWidth
+        ) / 2;
+
+    }else{
+
+      sourceHeight =
+        el.imageEl.naturalWidth /
+        targetRatio;
+
+
+      sourceY =
+        (
+          el.imageEl.naturalHeight -
+          sourceHeight
+        ) / 2;
+
+    }
+
+
+    ctx.beginPath();
+
+
+    ctx.rect(
+      -width/2,
+      -height/2,
+      width,
+      height
+    );
+
+
+    ctx.clip();
+
+
+    ctx.drawImage(
+      el.imageEl,
+      sourceX,
+      sourceY,
+      sourceWidth,
+      sourceHeight,
+      -width/2,
+      -height/2,
+      width,
+      height
+    );
+
+  }else{
+
+    let drawWidth =
+      width;
+
+
+    let drawHeight =
+      drawWidth /
+      imageRatio;
+
+
+    if(
+      drawHeight >
+      height
+    ){
+
+      drawHeight =
+        height;
+
+
+      drawWidth =
+        drawHeight *
+        imageRatio;
+
+    }
+
+
+    ctx.drawImage(
+      el.imageEl,
+      -drawWidth/2,
+      -drawHeight/2,
+      drawWidth,
+      drawHeight
+    );
+
+  }
+
+
+  ctx.restore();
+
+}
+
+
+/* =========================================================
+   DRAW STICKER
+========================================================= */
+
+function drawSticker(
+  ctx,
+  el,
+  dims
+){
+
+  ctx.save();
+
+
+  const x =
+    dims.w *
+    el.x /
+    100;
+
+
+  const y =
+    dims.h *
+    el.y /
+    100;
+
+
+  ctx.translate(
+    x,
+    y
+  );
+
+
+  ctx.rotate(
+    degToRad(
+      el.rotation ||
+      0
+    )
+  );
+
+
+  ctx.scale(
+    el.flipX ? -1 : 1,
+    el.flipY ? -1 : 1
+  );
+
+
+  ctx.globalAlpha =
+    (
+      el.opacity ??
+      100
+    ) /
+    100;
+
+
+  if(el.shadow){
+
+    ctx.shadowColor =
+      "rgba(0,0,0,.3)";
+
+
+    ctx.shadowBlur =
+      8;
+
+
+    ctx.shadowOffsetY =
+      3;
+
+  }
+
+
+  if(
+    el.imageEl
+  ){
+
+    const size =
+      el.size;
+
+
+    ctx.drawImage(
+      el.imageEl,
+      -size/2,
+      -size/2,
+      size,
+      size
+    );
+
+  }else{
+
+    ctx.font =
+      el.size +
+      "px 'Noto Color Emoji', 'Apple Color Emoji', sans-serif";
+
+
+    ctx.textAlign =
+      "center";
+
+
+    ctx.textBaseline =
+      "middle";
+
+
+    ctx.fillText(
+      el.content ||
+      "★",
+      0,
+      0
+    );
+
+  }
+
+
+  ctx.restore();
+
+}
+
+
+/* =========================================================
+   RENDER
+========================================================= */
+
+function render(){
+
+  const dims =
+    getDims();
+
+
+  canvas.width =
+    dims.w;
+
+
+  canvas.height =
+    dims.h;
+
+
+  const ctx =
+    canvas.getContext(
+      "2d"
+    );
+
+
+  ctx.clearRect(
+    0,
+    0,
+    dims.w,
+    dims.h
+  );
+
+
+  if(
+    state.background.mode !==
+    "transparent"
+  ){
+
+    ctx.fillStyle =
+      state.background.color ||
+      "#FFFFFF";
+
+
+    ctx.fillRect(
+      0,
+      0,
+      dims.w,
+      dims.h
+    );
+
+  }
+
+
+  const sorted =
+    [...state.elements]
+      .sort(
+        (a,b)=>
+          a.z-b.z
+      );
+
+
+  sorted.forEach(
+    element=>{
+
+      if(
+        element.type ===
+        "image"
+      ){
+
+        drawImage(
+          ctx,
+          element,
+          dims
+        );
+
+      }
+
+
+      else if(
+        element.type ===
+        "text"
+      ){
+
+        drawText(
+          ctx,
+          element,
+          dims
+        );
+
+      }
+
+
+      else if(
+        element.type ===
+        "sticker"
+      ){
+
+        drawSticker(
+          ctx,
+          element,
+          dims
+        );
+
+      }
+
+    }
+  );
+
+
+  updateSelectionBox();
+
+}
+
+
+/* =========================================================
+   OBJECT BOUNDS
+========================================================= */
+
+function getObjectBounds(
+  el
+){
+
+  const dims =
+    getDims();
+
+
+  if(
+    el.type ===
+    "image"
+  ){
+
+    return {
+
+      width:
+        dims.w *
+        el.width /
+        100,
+
+      height:
+        dims.h *
+        el.height /
+        100
+
+    };
+
+  }
+
+
+  if(
+    el.type ===
+    "sticker"
+  ){
+
+    return {
+
+      width:
+        el.size,
+
+      height:
+        el.size
+
+    };
+
+  }
+
+
+  const ctx =
+    canvas.getContext(
+      "2d"
+    );
+
+
+  ctx.save();
+
+
+  const style =
+    el.italic
+      ? "italic "
+      : "";
+
+
+  const weight =
+    el.bold
+      ? "800 "
+      : "400 ";
+
+
+  ctx.font =
+    style +
+    weight +
+    el.size +
+    "px " +
+    (
+      el.fontFamily ||
+      "'Noto Sans KR',sans-serif"
+    );
+
+
+  if(
+    el.vertical
+  ){
+
+    const count =
+      graphemes(
+        (
+          el.content ||
+          ""
+        ).replace(
+          /[\n ]/g,
+          ""
+        )
+      ).length;
+
+
+    ctx.restore();
+
+
+    return {
+
+      width:
+        el.size +
+        (
+          el.outlineWidth ||
+          0
+        ) * 2 +
+        12,
+
+      height:
+        Math.max(
+          30,
+          count *
+          el.size *
+          1.15
+        )
+
+    };
+
+  }
+
+
+  const lines =
+    wrapLines(
+      ctx,
+      el.content ||
+      "",
+      dims.w*.88
+    );
+
+
+  let maxWidth =
+    0;
+
+
+  lines.forEach(
+    line=>{
+
+      maxWidth =
+        Math.max(
+          maxWidth,
+          ctx.measureText(
+            line
+          ).width
+        );
+
+    }
+  );
+
+
+  ctx.restore();
+
+
+  return {
+
+    width:
+      Math.max(
+        60,
+        Math.min(
+          dims.w*.9,
+          maxWidth +
+          (
+            el.outlineWidth ||
+            0
+          ) * 2 +
+          12
+        )
+      ),
+
+    height:
+      Math.max(
+        30,
+        lines.length *
+        el.size *
+        1.25
+      )
+
+  };
+
+}
+
+
+/* =========================================================
+   SELECTION BOX
+========================================================= */
+
+function updateSelectionBox(){
+
+  const el =
+    getSelected();
+
+
+  if(!el){
+
+    selectionBox.classList.remove(
+      "show"
+    );
+
+
+    contextToolbar.classList.remove(
+      "show"
+    );
+
+
+    return;
+
+  }
+
+
+  const canvasRect =
+    canvas.getBoundingClientRect();
+
+
+  const frameRect =
+    canvasFrame.getBoundingClientRect();
+
+
+  const scaleX =
+    canvasRect.width /
+    canvas.width;
+
+
+  const scaleY =
+    canvasRect.height /
+    canvas.height;
+
+
+  const bounds =
+    getObjectBounds(
+      el
+    );
+
+
+  const centerX =
+    canvasRect.left -
+    frameRect.left +
+    canvasRect.width *
+    el.x /
+    100;
+
+
+  const centerY =
+    canvasRect.top -
+    frameRect.top +
+    canvasRect.height *
+    el.y /
+    100;
+
+
+  const width =
+    bounds.width *
+    scaleX;
+
+
+  const height =
+    bounds.height *
+    scaleY;
+
+
+  selectionBox.style.width =
+    width +
+    "px";
+
+
+  selectionBox.style.height =
+    height +
+    "px";
+
+
+  selectionBox.style.left =
+    (
+      centerX -
+      width/2
+    ) +
+    "px";
+
+
+  selectionBox.style.top =
+    (
+      centerY -
+      height/2
+    ) +
+    "px";
+
+
+  selectionBox.style.transform =
+    "rotate(" +
+    (
+      el.rotation ||
+      0
+    ) +
+    "deg)";
+
+
+  selectionBox.classList.add(
+    "show"
+  );
+
+
+  contextToolbar.classList.add(
+    "show"
+  );
+
+}
+
+
+/* =========================================================
+   POINTER
+========================================================= */
+
+function pointFromEvent(
+  event
+){
+
+  const rect =
+    canvas.getBoundingClientRect();
+
+
+  return {
+
+    x:
+      clamp(
+        (
+          event.clientX -
+          rect.left
+        ) /
+        rect.width *
+        100,
+        0,
+        100
+      ),
+
+    y:
+      clamp(
+        (
+          event.clientY -
+          rect.top
+        ) /
+        rect.height *
+        100,
+        0,
+        100
+      )
+
+  };
+
+}
+
+
+/* =========================================================
+   HIT TEST
+========================================================= */
+
+function hitTest(
+  point
+){
+
+  const sorted =
+    [...state.elements]
+      .sort(
+        (a,b)=>
+          b.z-a.z
+      );
+
+
+  const dims =
+    getDims();
+
+
+  for(
+    const el of sorted
+  ){
+
+    const dx =
+      point.x -
+      el.x;
+
+
+    const dy =
+      point.y -
+      el.y;
+
+
+    const rad =
+      degToRad(
+        -(el.rotation || 0)
+      );
+
+
+    const rx =
+      dx*Math.cos(rad) -
+      dy*Math.sin(rad);
+
+
+    const ry =
+      dx*Math.sin(rad) +
+      dy*Math.cos(rad);
+
+
+    if(
+      el.type ===
+      "image"
+    ){
+
+      if(
+        Math.abs(rx) <
+          el.width/2 &&
+        Math.abs(ry) <
+          el.height/2
+      ){
+
+        return el;
+
+      }
+
+    }
+
+
+    else if(
+      el.type ===
+      "sticker"
+    ){
+
+      const half =
+        el.size /
+        dims.w *
+        100 /
+        2;
+
+
+      if(
+        Math.abs(rx) <
+          half &&
+        Math.abs(ry) <
+          half
+      ){
+
+        return el;
+
+      }
+
+    }
+
+
+    else if(
+      el.type ===
+      "text"
+    ){
+
+      const bounds =
+        getObjectBounds(
+          el
+        );
+
+
+      const halfW =
+        bounds.width /
+        dims.w *
+        100 /
+        2;
+
+
+      const halfH =
+        bounds.height /
+        dims.h *
+        100 /
+        2;
+
+
+      if(
+        Math.abs(rx) <
+          halfW &&
+        Math.abs(ry) <
+          halfH
+      ){
+
+        return el;
+
+      }
+
+    }
+
+  }
+
+
+  return null;
+
+}
+
+
+/* =========================================================
+   SELECT
+========================================================= */
+
+function selectElement(
+  id
+){
+
+  state.selectedId =
+    id;
+
+
+  syncInspector();
+
+  renderLayers();
+
+  updateSelectionBox();
+
+}
+
+
+/* =========================================================
+   ADD TEXT
+========================================================= */
+
+function addTextElement(){
+
+  const element = {
+
+    id:
+      uid("text"),
+
+    type:
+      "text",
+
+    content:
+      "새 문구",
+
+    x:
+      50,
+
+    y:
+      50,
+
+    size:
+      60,
+
+    color:
+      "#ffffff",
+
+    bold:
+      true,
+
+    italic:
+      false,
+
+    underline:
+      false,
+
+    outline:
+      true,
+
+    outlineWidth:
+      6,
+
+    outlineColor:
+      "#000000",
+
+    shadow:
+      false,
+
+    shadowColor:
+      "#000000",
+
+    shadowAngle:
+      315,
+
+    shadowOpacity:
+      40,
+
+    shadowDistance:
+      10,
+
+    shadowBlur:
+      11,
+
+    curve:
+      0,
+
+    curveDirection:
+      1,
+
+    vertical:
+      false,
+
+    opacity:
+      100,
+
+    fontFamily:
+      "'Noto Sans KR', sans-serif",
+
+    rotation:
+      0,
+
+    z:
+      state.nextZ++
+
+  };
+
+
+  state.elements.push(
+    element
+  );
+
+
+  state.selectedId =
+    element.id;
+
+
+  syncInspector();
+
+  renderLayers();
+
+  render();
+
+}
+
+
+/* =========================================================
+   ADD IMAGE
+========================================================= */
+
+function createImageElement(
+  src,
+  name
+){
+
+  const image =
+    new Image();
+
+
+  image.onload =
+    function(){
+
+      const dims =
+        getDims();
+
+
+      const ratio =
+        image.naturalWidth /
+        image.naturalHeight;
+
+
+      const originalWidth =
+        60;
+
+
+      let originalHeight =
+        (
+          originalWidth *
+          dims.w /
+          dims.h
+        ) /
+        ratio;
+
+
+      originalHeight =
+        clamp(
+          originalHeight,
+          5,
+          120
+        );
+
+
+      const element = {
+
+        id:
+          uid("image"),
+
+        type:
+          "image",
+
+        name:
+          name ||
+          "이미지",
+
+        src,
+
+        imageEl:
+          image,
+
+        x:
+          50,
+
+        y:
+          50,
+
+        width:
+          originalWidth,
+
+        height:
+          originalHeight,
+
+        originalWidth,
+
+        originalHeight,
+
+        scale:
+          100,
+
+        fit:
+          "contain",
+
+        rotation:
+          0,
+
+        opacity:
+          100,
+
+        brightness:
+          100,
+
+        contrast:
+          100,
+
+        saturation:
+          100,
+
+        blur:
+          0,
+
+        z:
+          state.nextZ++
+
+      };
+
+
+      state.elements.push(
+        element
+      );
+
+
+      state.selectedId =
+        element.id;
+
+
+      clearMsg(
+        imgMsg
+      );
+
+
+      syncInspector();
+
+      renderLayers();
+
+      render();
+
+    };
+
+
+  image.onerror =
+    function(){
+
+      showMsg(
+        imgMsg,
+        "이미지를 불러오지 못했습니다.",
+        "error"
+      );
+
+    };
+
+
+  image.src =
+    src;
+
+}
+
+
+/* =========================================================
+   ADD STICKER
+========================================================= */
+
+function createStickerElement(
+  emoji,
+  name
+){
+
+  const element = {
+
+    id:
+      uid("sticker"),
+
+    type:
+      "sticker",
+
+    name:
+      name ||
+      "스티커",
+
+    content:
+      emoji,
+
+    x:
+      50,
+
+    y:
+      50,
+
+    size:
+      180,
+
+    rotation:
+      0,
+
+    opacity:
+      100,
+
+    shadow:
+      true,
+
+    flipX:
+      false,
+
+    flipY:
+      false,
+
+    z:
+      state.nextZ++
+
+  };
+
+
+  state.elements.push(
+    element
+  );
+
+
+  state.selectedId =
+    element.id;
+
+
+  syncInspector();
+
+  renderLayers();
+
+  render();
+
+}
+
+
+/* =========================================================
+   DELETE
+========================================================= */
+
+function deleteElement(
+  id
+){
+
+  state.elements =
+    state.elements.filter(
+      element =>
+        element.id !==
+        id
+    );
+
+
+  const sorted =
+    [...state.elements]
+      .sort(
+        (a,b)=>
+          b.z-a.z
+      );
+
+
+  state.selectedId =
+    sorted.length
+      ? sorted[0].id
+      : null;
+
+
+  syncInspector();
+
+  renderLayers();
+
+  render();
+
+}
+
+
+/* =========================================================
+   DUPLICATE
+========================================================= */
+
+function duplicateElement(
+  id
+){
+
+  const original =
+    state.elements.find(
+      element =>
+        element.id ===
+        id
+    );
+
+
+  if(!original){
+    return;
+  }
+
+
+  const clone =
+    {
+      ...original
+    };
+
+
+  clone.id =
+    uid("element");
+
+
+  clone.x =
+    clamp(
+      original.x+4,
+      0,
+      100
+    );
+
+
+  clone.y =
+    clamp(
+      original.y+4,
+      0,
+      100
+    );
+
+
+  clone.z =
+    state.nextZ++;
+
+
+  state.elements.push(
+    clone
+  );
+
+
+  state.selectedId =
+    clone.id;
+
+
+  syncInspector();
+
+  renderLayers();
+
+  render();
+
+}
+
+
+/* =========================================================
+   LAYER ONE STEP
+========================================================= */
+
+function moveLayerOneStep(
+  id,
+  direction
+){
+
+  const sorted =
+    [...state.elements]
+      .sort(
+        (a,b)=>
+          b.z-a.z
+      );
+
+
+  const index =
+    sorted.findIndex(
+      element =>
+        element.id ===
+        id
+    );
+
+
+  if(index === -1){
+    return;
+  }
+
+
+  const targetIndex =
+    direction ===
+      "front"
+      ? index-1
+      : index+1;
+
+
+  if(
+    targetIndex < 0 ||
+    targetIndex >=
+      sorted.length
+  ){
+
+    return;
+
+  }
+
+
+  const current =
+    sorted[index];
+
+
+  const target =
+    sorted[targetIndex];
+
+
+  const temp =
+    current.z;
+
+
+  current.z =
+    target.z;
+
+
+  target.z =
+    temp;
+
+
+  renderLayers();
+
+  render();
+
+}
+
+
+/* =========================================================
+   LAYERS
+========================================================= */
+
+function renderLayers(){
+
+  if(!layerList){
+    return;
+  }
+
+
+  layerList.innerHTML =
+    "";
+
+
+  const canvasLayer =
+    document.createElement(
+      "div"
+    );
+
+
+  canvasLayer.className =
+    "layer-item canvas-layer";
+
+
+  canvasLayer.innerHTML =
+    `
+      <span class="icon">▧</span>
+      <span class="name">캔버스</span>
+    `;
+
+
+  layerList.appendChild(
+    canvasLayer
+  );
+
+
+  const sorted =
+    [...state.elements]
+      .sort(
+        (a,b)=>
+          b.z-a.z
+      );
+
+
+  if(layerCount){
+
+    layerCount.textContent =
+      "(" +
+      (
+        state.elements.length +
+        1
+      ) +
+      ")";
+
+  }
+
+
+  sorted.forEach(
+    function(
+      element,
+      index
+    ){
+
+      const item =
+        document.createElement(
+          "div"
+        );
+
+
+      item.className =
+        "layer-item" +
+        (
+          element.id ===
+          state.selectedId
+            ? " active"
+            : ""
+        );
+
+
+      const icon =
+        document.createElement(
+          "span"
+        );
+
+
+      icon.className =
+        "icon";
+
+
+      if(
+        element.type ===
+        "image"
+      ){
+
+        if(
+          element.src
+        ){
+
+          const image =
+            document.createElement(
+              "img"
+            );
+
+
+          image.src =
+            element.src;
+
+
+          icon.appendChild(
+            image
+          );
+
+        }else{
+
+          icon.textContent =
+            "▧";
+
+        }
+
+      }
+
+
+      else if(
+        element.type ===
+        "sticker"
+      ){
+
+        if(
+          element.src
+        ){
+
+          const image =
+            document.createElement(
+              "img"
+            );
+
+
+          image.src =
+            element.src;
+
+
+          icon.appendChild(
+            image
+          );
+
+        }else{
+
+          icon.textContent =
+            element.content ||
+            "★";
+
+        }
+
+      }
+
+
+      else{
+
+        icon.textContent =
+          "T";
+
+      }
+
+
+      const name =
+        document.createElement(
+          "span"
+        );
+
+
+      name.className =
+        "name";
+
+
+      name.textContent =
+        element.type ===
+          "text"
+
+          ? (
+              element.content ||
+              "(빈 문구)"
+            )
+
+          : (
+              element.name ||
+              (
+                element.type ===
+                "image"
+                  ? "이미지"
+                  : "스티커"
+              )
+            );
+
+
+      const actions =
+        document.createElement(
+          "div"
+        );
+
+
+      actions.className =
+        "layer-actions";
+
+
+      const back =
+        document.createElement(
+          "button"
+        );
+
+
+      back.type =
+        "button";
+
+
+      back.className =
+        "mini-btn";
+
+
+      back.textContent =
+        "▾";
+
+
+      back.title =
+        "한 칸 뒤로";
+
+
+      back.disabled =
+        index ===
+        sorted.length-1;
+
+
+      back.addEventListener(
+        "click",
+        function(event){
+
+          event.stopPropagation();
+
+
+          moveLayerOneStep(
+            element.id,
+            "back"
+          );
+
+        }
+      );
+
+
+      const front =
+        document.createElement(
+          "button"
+        );
+
+
+      front.type =
+        "button";
+
+
+      front.className =
+        "mini-btn";
+
+
+      front.textContent =
+        "▴";
+
+
+      front.title =
+        "한 칸 앞으로";
+
+
+      front.disabled =
+        index ===
+        0;
+
+
+      front.addEventListener(
+        "click",
+        function(event){
+
+          event.stopPropagation();
+
+
+          moveLayerOneStep(
+            element.id,
+            "front"
+          );
+
+        }
+      );
+
+
+      const duplicate =
+        document.createElement(
+          "button"
+        );
+
+
+      duplicate.type =
+        "button";
+
+
+      duplicate.className =
+        "mini-btn";
+
+
+      duplicate.textContent =
+        "⧉";
+
+
+      duplicate.title =
+        "복제";
+
+
+      duplicate.addEventListener(
+        "click",
+        function(event){
+
+          event.stopPropagation();
+
+
+          duplicateElement(
+            element.id
+          );
+
+        }
+      );
+
+
+      const remove =
+        document.createElement(
+          "button"
+        );
+
+
+      remove.type =
+        "button";
+
+
+      remove.className =
+        "mini-btn delete";
+
+
+      remove.textContent =
+        "×";
+
+
+      remove.title =
+        "삭제";
+
+
+      remove.addEventListener(
+        "click",
+        function(event){
+
+          event.stopPropagation();
+
+
+          deleteElement(
+            element.id
+          );
+
+        }
+      );
+
+
+      actions.appendChild(
+        back
+      );
+
+
+      actions.appendChild(
+        front
+      );
+
+
+      actions.appendChild(
+        duplicate
+      );
+
+
+      actions.appendChild(
+        remove
+      );
+
+
+      item.appendChild(
+        icon
+      );
+
+
+      item.appendChild(
+        name
+      );
+
+
+      item.appendChild(
+        actions
+      );
+
+
+      item.addEventListener(
+        "click",
+        function(){
+
+          selectElement(
+            element.id
+          );
+
+        }
+      );
+
+
+      layerList.appendChild(
+        item
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   INSPECTOR
+========================================================= */
+
+function syncInspector(){
+
+  const el =
+    getSelected();
+
+
+  $("pinAddTextBtn")
+    .classList.toggle(
+      "active",
+      !!el && el.type === "text"
+    );
+
+
+  $("pinAddImageBtn")
+    .classList.toggle(
+      "active",
+      !!el && el.type === "image"
+    );
+
+
+  $("pinAddStickerBtn")
+    .classList.toggle(
+      "active",
+      !!el && el.type === "sticker"
+    );
+
+
+  if(!el){
+
+    emptyInspector.style.display =
+      "block";
+
+
+    objectHeader.style.display =
+      "none";
+
+
+    panelImage.style.display =
+      "none";
+
+
+    panelText.style.display =
+      "none";
+
+
+    panelSticker.style.display =
+      "none";
+
+
+    panelTransform.style.display =
+      "none";
+
+
+    contextToolbar.classList.remove(
+      "show"
+    );
+
+
+    return;
+
+  }
+
+
+  emptyInspector.style.display =
+    "none";
+
+
+  objectHeader.style.display =
+    "flex";
+
+
+  panelImage.style.display =
+    el.type === "image"
+      ? "block"
+      : "none";
+
+
+  panelText.style.display =
+    el.type === "text"
+      ? "block"
+      : "none";
+
+
+  panelSticker.style.display =
+    el.type === "sticker"
+      ? "block"
+      : "none";
+
+
+  panelTransform.style.display =
+    "block";
+
+
+  if(
+    el.type ===
+    "image"
+  ){
+
+    objectIcon.textContent =
+      "▧";
+
+
+    objectTitle.textContent =
+      "이미지";
+
+
+    objectSubtitle.textContent =
+      el.name ||
+      "이미지";
+
+
+    $("inspectorImagePreview")
+      .src =
+      el.src;
+
+
+    $("inspectorImageName")
+      .textContent =
+      el.name ||
+      "이미지";
+
+
+    setRange(
+      "imageScaleRange",
+      "imageScaleVal",
+      el.scale ??
+        100,
+      "%"
+    );
+
+
+    setRange(
+      "brightnessRange",
+      "brightnessVal",
+      el.brightness ??
+        100,
+      "%"
+    );
+
+
+    setRange(
+      "contrastRange",
+      "contrastVal",
+      el.contrast ??
+        100,
+      "%"
+    );
+
+
+    setRange(
+      "saturationRange",
+      "saturationVal",
+      el.saturation ??
+        100,
+      "%"
+    );
+
+
+    setRange(
+      "blurRange",
+      "blurVal",
+      el.blur ??
+        0,
+      ""
+    );
+
+
+    setRange(
+      "imageOpacityRange",
+      "imageOpacityVal",
+      el.opacity ??
+        100,
+      "%"
+    );
+
+
+    setRange(
+      "imageRotationRange",
+      "imageRotationVal",
+      el.rotation ??
+        0,
+      "°"
+    );
+
+
+    $("imageXInput").value =
+      Number(
+        el.x
+      ).toFixed(1);
+
+
+    $("imageYInput").value =
+      Number(
+        el.y
+      ).toFixed(1);
+
+
+    $("imageWidthInput").value =
+      Number(
+        el.width
+      ).toFixed(1);
+
+
+    $("imageHeightInput").value =
+      Number(
+        el.height
+      ).toFixed(1);
+
+  }
+
+
+  if(
+    el.type ===
+    "text"
+  ){
+
+    objectIcon.textContent =
+      "T";
+
+
+    objectTitle.textContent =
+      "텍스트";
+
+
+    objectSubtitle.textContent =
+      el.content ||
+      "빈 문구";
+
+
+    $("textInput").value =
+      el.content ||
+      "";
+
+
+    $("fontSelect").value =
+      el.fontFamily ||
+      "'Noto Sans KR', sans-serif";
+
+
+    $("textSizeRange").value =
+      el.size ||
+      60;
+
+
+    $("textSizeInput").value =
+      el.size ||
+      60;
+
+
+    $("boldToggleBtn")
+      .classList.toggle(
+        "active",
+        !!el.bold
+      );
+
+
+    $("italicToggleBtn")
+      .classList.toggle(
+        "active",
+        !!el.italic
+      );
+
+
+    $("underlineToggleBtn")
+      .classList.toggle(
+        "active",
+        !!el.underline
+      );
+
+
+    $("textColorInput").value =
+      el.color ||
+      "#ffffff";
+
+
+    $("outlineToggle").checked =
+      !!el.outline;
+
+
+    syncCollapseVisual(
+      "outlineToggle",
+      "outlineBody"
+    );
+
+
+    setRange(
+      "outlineRange",
+      "outlineVal",
+      el.outlineWidth ??
+        6,
+      ""
+    );
+
+
+    $("outlineColorInput").value =
+      el.outlineColor ||
+      "#000000";
+
+
+    $("textShadowToggle").checked =
+      !!el.shadow;
+
+
+    syncCollapseVisual(
+      "textShadowToggle",
+      "shadowBody"
+    );
+
+
+    $("shadowColorInput").value =
+      el.shadowColor ||
+      "#000000";
+
+
+    setRange(
+      "shadowAngleRange",
+      "shadowAngleVal",
+      el.shadowAngle ??
+        315,
+      "°"
+    );
+
+
+    setRange(
+      "shadowOpacityRange",
+      "shadowOpacityVal",
+      el.shadowOpacity ??
+        40,
+      "%"
+    );
+
+
+    setRange(
+      "shadowDistanceRange",
+      "shadowDistanceVal",
+      el.shadowDistance ??
+        10,
+      ""
+    );
+
+
+    setRange(
+      "shadowBlurRange",
+      "shadowBlurVal",
+      el.shadowBlur ??
+        11,
+      ""
+    );
+
+
+    $("curveToggle").checked =
+      !!el.curve;
+
+
+    syncCollapseVisual(
+      "curveToggle",
+      "curveBody"
+    );
+
+
+    $("curveNormalBtn")
+      .classList.toggle(
+        "active",
+        (
+          el.curveDirection ??
+          1
+        ) === 1
+      );
+
+
+    $("curveFlipBtn")
+      .classList.toggle(
+        "active",
+        (
+          el.curveDirection ??
+          1
+        ) === -1
+      );
+
+
+    $("verticalToggle").checked =
+      !!el.vertical;
+
+
+    setRange(
+      "textOpacityRange",
+      "textOpacityVal",
+      el.opacity ??
+        100,
+      "%"
+    );
+
+  }
+
+
+  if(
+    el.type ===
+    "sticker"
+  ){
+
+    objectIcon.textContent =
+      "★";
+
+
+    objectTitle.textContent =
+      "스티커";
+
+
+    objectSubtitle.textContent =
+      el.name ||
+      "스티커";
+
+
+    setRange(
+      "stickerSizeRange",
+      "stickerSizeVal",
+      el.size ??
+        180,
+      ""
+    );
+
+
+    setRange(
+      "stickerRotationRange",
+      "stickerRotationVal",
+      el.rotation ??
+        0,
+      "°"
+    );
+
+
+    setRange(
+      "stickerOpacityRange",
+      "stickerOpacityVal",
+      el.opacity ??
+        100,
+      "%"
+    );
+
+
+    $("stickerShadowToggle").checked =
+      !!el.shadow;
+
+  }
+
+
+  setRange(
+    "objectXRange",
+    "objectXVal",
+    Number(
+      el.x
+    ).toFixed(1),
+    "%"
+  );
+
+
+  setRange(
+    "objectYRange",
+    "objectYVal",
+    Number(
+      el.y
+    ).toFixed(1),
+    "%"
+  );
+
+
+  refreshAllRangeFills();
+
+}
+
+
+/* =========================================================
+   COMMON POSITION
+========================================================= */
+
+$("objectXRange")
+  .addEventListener(
+    "input",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(!el){
+        return;
+      }
+
+
+      el.x =
+        Number(
+          this.value
+        );
+
+
+      $("objectXVal")
+        .textContent =
+        Number(
+          el.x
+        ).toFixed(1) +
+        "%";
+
+
+      if(
+        el.type ===
+        "image"
+      ){
+
+        $("imageXInput")
+          .value =
+          Number(
+            el.x
+          ).toFixed(1);
+
+      }
+
+
+      render();
+
+    }
+  );
+
+
+$("objectYRange")
+  .addEventListener(
+    "input",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(!el){
+        return;
+      }
+
+
+      el.y =
+        Number(
+          this.value
+        );
+
+
+      $("objectYVal")
+        .textContent =
+        Number(
+          el.y
+        ).toFixed(1) +
+        "%";
+
+
+      if(
+        el.type ===
+        "image"
+      ){
+
+        $("imageYInput")
+          .value =
+          Number(
+            el.y
+          ).toFixed(1);
+
+      }
+
+
+      render();
+
+    }
+  );
+
+
+/* =========================================================
+   IMAGE SCALE
+========================================================= */
+
+$("imageScaleRange")
+  .addEventListener(
+    "input",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(
+        !el ||
+        el.type !==
+        "image"
+      ){
+
+        return;
+
+      }
+
+
+      el.scale =
+        Number(
+          this.value
+        );
+
+
+      el.width =
+        el.originalWidth *
+        el.scale /
+        100;
+
+
+      el.height =
+        el.originalHeight *
+        el.scale /
+        100;
+
+
+      el.fit =
+        "contain";
+
+
+      $("imageScaleVal")
+        .textContent =
+        el.scale +
+        "%";
+
+
+      $("imageWidthInput")
+        .value =
+        Number(
+          el.width
+        ).toFixed(1);
+
+
+      $("imageHeightInput")
+        .value =
+        Number(
+          el.height
+        ).toFixed(1);
+
+
+      render();
+
+    }
+  );
+
+
+/* =========================================================
+   IMAGE FILL
+========================================================= */
+
+$("imageFillBtn")
+  .addEventListener(
+    "click",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(
+        !el ||
+        el.type !==
+        "image" ||
+        !el.imageEl
+      ){
+
+        return;
+
+      }
+
+
+      const dims =
+        getDims();
+
+
+      const ratio =
+        el.imageEl.naturalWidth /
+        el.imageEl.naturalHeight;
+
+
+      const canvasRatio =
+        dims.w /
+        dims.h;
+
+
+      let width;
+      let height;
+
+
+      if(
+        ratio >
+        canvasRatio
+      ){
+
+        height =
+          100;
+
+
+        width =
+          100 *
+          ratio /
+          canvasRatio;
+
+      }else{
+
+        width =
+          100;
+
+
+        height =
+          100 *
+          canvasRatio /
+          ratio;
+
+      }
+
+
+      el.width =
+        width;
+
+
+      el.height =
+        height;
+
+
+      el.fit =
+        "cover";
+
+
+      el.scale =
+        100;
+
+
+      el.x =
+        50;
+
+
+      el.y =
+        50;
+
+
+      syncInspector();
+
+      render();
+
+    }
+  );
+
+
+/* =========================================================
+   IMAGE RESET
+========================================================= */
+
+$("imageResetBtn")
+  .addEventListener(
+    "click",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(
+        !el ||
+        el.type !==
+        "image"
+      ){
+
+        return;
+
+      }
+
+
+      el.width =
+        el.originalWidth;
+
+
+      el.height =
+        el.originalHeight;
+
+
+      el.scale =
+        100;
+
+
+      el.fit =
+        "contain";
+
+
+      el.x =
+        50;
+
+
+      el.y =
+        50;
+
+
+      el.rotation =
+        0;
+
+
+      el.opacity =
+        100;
+
+
+      el.brightness =
+        100;
+
+
+      el.contrast =
+        100;
+
+
+      el.saturation =
+        100;
+
+
+      el.blur =
+        0;
+
+
+      syncInspector();
+
+      render();
+
+    }
+  );
+
+
+/* =========================================================
+   IMAGE POSITION INPUT
+========================================================= */
+
+$("imageXInput")
+  .addEventListener(
+    "input",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(
+        !el ||
+        el.type !==
+        "image"
+      ){
+
+        return;
+
+      }
+
+
+      const value =
+        Number(
+          this.value
+        );
+
+
+      if(
+        !Number.isFinite(
+          value
+        )
+      ){
+
+        return;
+
+      }
+
+
+      el.x =
+        clamp(
+          value,
+          0,
+          100
+        );
+
+
+      syncInspector();
+
+      render();
+
+    }
+  );
+
+
+$("imageYInput")
+  .addEventListener(
+    "input",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(
+        !el ||
+        el.type !==
+        "image"
+      ){
+
+        return;
+
+      }
+
+
+      const value =
+        Number(
+          this.value
+        );
+
+
+      if(
+        !Number.isFinite(
+          value
+        )
+      ){
+
+        return;
+
+      }
+
+
+      el.y =
+        clamp(
+          value,
+          0,
+          100
+        );
+
+
+      syncInspector();
+
+      render();
+
+    }
+  );
+
+
+/* =========================================================
+   IMAGE SIZE
+========================================================= */
+
+$("imageWidthInput")
+  .addEventListener(
+    "input",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(
+        !el ||
+        el.type !==
+        "image"
+      ){
+
+        return;
+
+      }
+
+
+      const value =
+        Number(
+          this.value
+        );
+
+
+      if(
+        !Number.isFinite(
+          value
+        )
+      ){
+
+        return;
+
+      }
+
+
+      el.width =
+        clamp(
+          value,
+          1,
+          300
+        );
+
+
+      el.fit =
+        "contain";
+
+
+      el.scale =
+        el.originalWidth
+          ? (
+              el.width /
+              el.originalWidth *
+              100
+            )
+          : 100;
+
+
+      render();
+
+    }
+  );
+
+
+$("imageHeightInput")
+  .addEventListener(
+    "input",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(
+        !el ||
+        el.type !==
+        "image"
+      ){
+
+        return;
+
+      }
+
+
+      const value =
+        Number(
+          this.value
+        );
+
+
+      if(
+        !Number.isFinite(
+          value
+        )
+      ){
+
+        return;
+
+      }
+
+
+      el.height =
+        clamp(
+          value,
+          1,
+          300
+        );
+
+
+      el.fit =
+        "contain";
+
+
+      render();
+
+    }
+  );
+
+
+/* =========================================================
+   IMAGE FILTERS
+========================================================= */
+
+function bindImageRange(
+  inputId,
+  valueId,
+  property,
+  suffix
+){
+
+  $(inputId)
+    .addEventListener(
+      "input",
+      function(){
+
+        const el =
+          getSelected();
+
+
+        if(
+          !el ||
+          el.type !==
+          "image"
+        ){
+
+          return;
+
+        }
+
+
+        el[property] =
+          Number(
+            this.value
+          );
+
+
+        $(valueId)
+          .textContent =
+          el[property] +
+          suffix;
+
+
+        render();
+
+      }
+    );
+
+}
+
+
+bindImageRange(
+  "brightnessRange",
+  "brightnessVal",
+  "brightness",
+  "%"
+);
+
+
+bindImageRange(
+  "contrastRange",
+  "contrastVal",
+  "contrast",
+  "%"
+);
+
+
+bindImageRange(
+  "saturationRange",
+  "saturationVal",
+  "saturation",
+  "%"
+);
+
+
+bindImageRange(
+  "blurRange",
+  "blurVal",
+  "blur",
+  ""
+);
+
+
+bindImageRange(
+  "imageOpacityRange",
+  "imageOpacityVal",
+  "opacity",
+  "%"
+);
+
+
+bindImageRange(
+  "imageRotationRange",
+  "imageRotationVal",
+  "rotation",
+  "°"
+);
+
+
+/* =========================================================
+   TEXT CONTROLS
+========================================================= */
+
+$("pinAddTextBtn")
+  .addEventListener(
+    "click",
+    addTextElement
+  );
+
+
+$("pinAddImageBtn")
+  .addEventListener(
+    "click",
+    function(){
+
+      imageFileInput.click();
+
+    }
+  );
+
+
+$("pinAddStickerBtn")
+  .addEventListener(
+    "click",
+    function(){
+
+      activateTab(
+        "sticker"
+      );
+
+    }
+  );
+
+
+$("leftAddTextBtn")
+  .addEventListener(
+    "click",
+    addTextElement
+  );
+
+
+$("textInput")
+  .addEventListener(
+    "input",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(
+        !el ||
+        el.type !==
+        "text"
+      ){
+
+        return;
+
+      }
+
+
+      el.content =
+        this.value;
+
+
+      $("objectSubtitle")
+        .textContent =
+        el.content ||
+        "빈 문구";
+
+
+      renderLayers();
+
+      render();
+
+    }
+  );
+
+
+$("fontSelect")
+  .addEventListener(
+    "change",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(
+        !el ||
+        el.type !==
+        "text"
+      ){
+
+        return;
+
+      }
+
+
+      el.fontFamily =
+        this.value;
+
+
+      render();
+
+    }
+  );
+
+
+$("textSizeRange")
+  .addEventListener(
+    "input",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(
+        !el ||
+        el.type !==
+        "text"
+      ){
+
+        return;
+
+      }
+
+
+      el.size =
+        Number(
+          this.value
+        );
+
+
+      $("textSizeInput")
+        .value =
+        el.size;
+
+
+      render();
+
+    }
+  );
+
+
+$("textSizeInput")
+  .addEventListener(
+    "input",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(
+        !el ||
+        el.type !==
+        "text"
+      ){
+
+        return;
+
+      }
+
+
+      const value =
+        Number(
+          this.value
+        );
+
+
+      if(
+        !Number.isFinite(
+          value
+        )
+      ){
+
+        return;
+
+      }
+
+
+      el.size =
+        clamp(
+          value,
+          8,
+          500
+        );
+
+
+      $("textSizeRange")
+        .value =
+        clamp(
+          el.size,
+          16,
+          220
+        );
+
+
+      render();
+
+    }
+  );
+
+
+$("boldToggleBtn")
+  .addEventListener(
+    "click",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(
+        !el ||
+        el.type !==
+        "text"
+      ){
+
+        return;
+
+      }
+
+
+      el.bold =
+        !el.bold;
+
+
+      this.classList.toggle(
+        "active",
+        el.bold
+      );
+
+
+      render();
+
+    }
+  );
+
+
+$("italicToggleBtn")
+  .addEventListener(
+    "click",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(
+        !el ||
+        el.type !==
+        "text"
+      ){
+
+        return;
+
+      }
+
+
+      el.italic =
+        !el.italic;
+
+
+      this.classList.toggle(
+        "active",
+        el.italic
+      );
+
+
+      render();
+
+    }
+  );
+
+
+$("underlineToggleBtn")
+  .addEventListener(
+    "click",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(
+        !el ||
+        el.type !==
+        "text"
+      ){
+
+        return;
+
+      }
+
+
+      el.underline =
+        !el.underline;
+
+
+      this.classList.toggle(
+        "active",
+        el.underline
+      );
+
+
+      render();
+
+    }
+  );
+
+
+$("textColorInput")
+  .addEventListener(
+    "input",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(
+        !el ||
+        el.type !==
+        "text"
+      ){
+
+        return;
+
+      }
+
+
+      el.color =
+        this.value;
+
+
+      render();
+
+    }
+  );
+
+
+/* =========================================================
+   OUTLINE
+========================================================= */
+
+$("outlineToggle")
+  .addEventListener(
+    "change",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(
+        !el ||
+        el.type !==
+        "text"
+      ){
+
+        return;
+
+      }
+
+
+      el.outline =
+        this.checked;
+
+
+      render();
+
+    }
+  );
+
+
+$("outlineRange")
+  .addEventListener(
+    "input",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(
+        !el ||
+        el.type !==
+        "text"
+      ){
+
+        return;
+
+      }
+
+
+      el.outlineWidth =
+        Number(
+          this.value
+        );
+
+
+      $("outlineVal")
+        .textContent =
+        el.outlineWidth;
+
+
+      render();
+
+    }
+  );
+
+
+$("outlineColorInput")
+  .addEventListener(
+    "input",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(
+        !el ||
+        el.type !==
+        "text"
+      ){
+
+        return;
+
+      }
+
+
+      el.outlineColor =
+        this.value;
+
+
+      render();
+
+    }
+  );
+
+
+/* =========================================================
+   SHADOW
+========================================================= */
+
+$("textShadowToggle")
+  .addEventListener(
+    "change",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(
+        !el ||
+        el.type !==
+        "text"
+      ){
+
+        return;
+
+      }
+
+
+      el.shadow =
+        this.checked;
+
+
+      render();
+
+    }
+  );
+
+
+$("shadowColorInput")
+  .addEventListener(
+    "input",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(
+        !el ||
+        el.type !==
+        "text"
+      ){
+
+        return;
+
+      }
+
+
+      el.shadowColor =
+        this.value;
+
+
+      render();
+
+    }
+  );
+
+
+$("shadowAngleRange")
+  .addEventListener(
+    "input",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(
+        !el ||
+        el.type !==
+        "text"
+      ){
+
+        return;
+
+      }
+
+
+      el.shadowAngle =
+        Number(
+          this.value
+        );
+
+
+      $("shadowAngleVal")
+        .textContent =
+        el.shadowAngle +
+        "°";
+
+
+      render();
+
+    }
+  );
+
+
+$("shadowOpacityRange")
+  .addEventListener(
+    "input",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(
+        !el ||
+        el.type !==
+        "text"
+      ){
+
+        return;
+
+      }
+
+
+      el.shadowOpacity =
+        Number(
+          this.value
+        );
+
+
+      $("shadowOpacityVal")
+        .textContent =
+        el.shadowOpacity +
+        "%";
+
+
+      render();
+
+    }
+  );
+
+
+$("shadowDistanceRange")
+  .addEventListener(
+    "input",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(
+        !el ||
+        el.type !==
+        "text"
+      ){
+
+        return;
+
+      }
+
+
+      el.shadowDistance =
+        Number(
+          this.value
+        );
+
+
+      $("shadowDistanceVal")
+        .textContent =
+        el.shadowDistance;
+
+
+      render();
+
+    }
+  );
+
+
+$("shadowBlurRange")
+  .addEventListener(
+    "input",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(
+        !el ||
+        el.type !==
+        "text"
+      ){
+
+        return;
+
+      }
+
+
+      el.shadowBlur =
+        Number(
+          this.value
+        );
+
+
+      $("shadowBlurVal")
+        .textContent =
+        el.shadowBlur;
+
+
+      render();
+
+    }
+  );
+
+
+/* =========================================================
+   CURVE
+========================================================= */
+
+$("curveToggle")
+  .addEventListener(
+    "change",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(
+        !el ||
+        el.type !==
+        "text"
+      ){
+
+        return;
+
+      }
+
+
+      el.curve =
+        this.checked
+          ? 45
+          : 0;
+
+
+      render();
+
+    }
+  );
+
+
+$("curveNormalBtn")
+  .addEventListener(
+    "click",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(
+        !el ||
+        el.type !==
+        "text"
+      ){
+
+        return;
+
+      }
+
+
+      el.curveDirection =
+        1;
+
+
+      $("curveNormalBtn")
+        .classList.add(
+          "active"
+        );
+
+
+      $("curveFlipBtn")
+        .classList.remove(
+          "active"
+        );
+
+
+      render();
+
+    }
+  );
+
+
+$("curveFlipBtn")
+  .addEventListener(
+    "click",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(
+        !el ||
+        el.type !==
+        "text"
+      ){
+
+        return;
+
+      }
+
+
+      el.curveDirection =
+        -1;
+
+
+      $("curveFlipBtn")
+        .classList.add(
+          "active"
+        );
+
+
+      $("curveNormalBtn")
+        .classList.remove(
+          "active"
+        );
+
+
+      render();
+
+    }
+  );
+
+
+/* =========================================================
+   VERTICAL
+========================================================= */
+
+$("verticalToggle")
+  .addEventListener(
+    "change",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(
+        !el ||
+        el.type !==
+        "text"
+      ){
+
+        return;
+
+      }
+
+
+      el.vertical =
+        this.checked;
+
+
+      render();
+
+    }
+  );
+
+
+/* =========================================================
+   TEXT OPACITY
+========================================================= */
+
+$("textOpacityRange")
+  .addEventListener(
+    "input",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(
+        !el ||
+        el.type !==
+        "text"
+      ){
+
+        return;
+
+      }
+
+
+      el.opacity =
+        Number(
+          this.value
+        );
+
+
+      $("textOpacityVal")
+        .textContent =
+        el.opacity +
+        "%";
+
+
+      render();
+
+    }
+  );
+
+
+/* =========================================================
+   STICKER
+========================================================= */
+
+function bindStickerRange(
+  inputId,
+  valueId,
+  property,
+  suffix
+){
+
+  $(inputId)
+    .addEventListener(
+      "input",
+      function(){
+
+        const el =
+          getSelected();
+
+
+        if(
+          !el ||
+          el.type !==
+          "sticker"
+        ){
+
+          return;
+
+        }
+
+
+        el[property] =
+          Number(
+            this.value
+          );
+
+
+        $(valueId)
+          .textContent =
+          el[property] +
+          suffix;
+
+
+        render();
+
+      }
+    );
+
+}
+
+
+bindStickerRange(
+  "stickerSizeRange",
+  "stickerSizeVal",
+  "size",
+  ""
+);
+
+
+bindStickerRange(
+  "stickerRotationRange",
+  "stickerRotationVal",
+  "rotation",
+  "°"
+);
+
+
+bindStickerRange(
+  "stickerOpacityRange",
+  "stickerOpacityVal",
+  "opacity",
+  "%"
+);
+
+
+$("stickerShadowToggle")
+  .addEventListener(
+    "change",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(
+        !el ||
+        el.type !==
+        "sticker"
+      ){
+
+        return;
+
+      }
+
+
+      el.shadow =
+        this.checked;
+
+
+      render();
+
+    }
+  );
+
+
+$("flipHorizontalBtn")
+  .addEventListener(
+    "click",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(
+        !el ||
+        el.type !==
+        "sticker"
+      ){
+
+        return;
+
+      }
+
+
+      el.flipX =
+        !el.flipX;
+
+
+      render();
+
+    }
+  );
+
+
+$("flipVerticalBtn")
+  .addEventListener(
+    "click",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(
+        !el ||
+        el.type !==
+        "sticker"
+      ){
+
+        return;
+
+      }
+
+
+      el.flipY =
+        !el.flipY;
+
+
+      render();
+
+    }
+  );
+
+
+/* =========================================================
+   ASPECT
+========================================================= */
+
+$("aspectCards")
+  .addEventListener(
+    "click",
+    function(e){
+
+      const button =
+        e.target.closest(
+          ".size-card"
+        );
+
+
+      if(!button){
+        return;
+      }
+
+
+      state.aspect =
+        button.dataset.aspect;
+
+
+      aspectCards
+        .querySelectorAll(
+          ".size-card"
+        )
+        .forEach(
+          item=>{
+
+            item.classList.toggle(
+              "active",
+              item === button
+            );
+
+          }
+        );
+
+
+      updateCrumb();
+
+      render();
+
+    }
+  );
+
+
+/* =========================================================
+   BACKGROUND
+========================================================= */
+
+const bgModeCards =
+  $("bgModeCards");
+
+
+const bgColorInput =
+  $("bgColorInput");
+
+
+const bgColorLabel =
+  $("bgColorLabel");
+
+
+function syncBgUI(){
+
+  bgModeCards
+    .querySelectorAll(
+      ".size-card"
+    )
+    .forEach(
+      item=>{
+
+        item.classList.toggle(
+          "active",
+          item.dataset.bgMode ===
+          state.background.mode
+        );
+
+      }
+    );
+
+
+  bgColorInput.value =
+    state.background.color ||
+    "#ffffff";
+
+
+  bgColorLabel.textContent =
+    (
+      state.background.color ||
+      "#ffffff"
+        ).toUpperCase();
+
+}
+
+
+bgModeCards.addEventListener(
+  "click",
+  function(e){
+
+    const button =
+      e.target.closest(
+        ".size-card"
+      );
+
+
+    if(!button){
+      return;
+    }
+
+
+    state.background.mode =
+      button.dataset.bgMode;
+
+
+    syncBgUI();
+
+    render();
+
+  }
+);
+
+
+bgColorInput.addEventListener(
+  "input",
+  function(){
+
+    state.background.color =
+      this.value;
+
+
+    state.background.mode =
+      "color";
+
+
+    syncBgUI();
+
+    render();
+
+  }
+);
+
+
+function updateCrumb(){
+
+  const dims =
+    getDims();
+
+
+  crumbLabel.textContent =
+    state.aspect +
+    " · " +
+    dims.w +
+    "×" +
+    dims.h;
+
+}
+
+
+/* =========================================================
+   IMAGE UPLOAD
+========================================================= */
+
+imageFileInput
+  .addEventListener(
+    "change",
+    function(e){
+
+      const files =
+        Array.from(
+          e.target.files ||
+          []
+        );
+
+
+      files.forEach(
+        file=>{
+
+          if(
+            ![
+              "image/png",
+              "image/jpeg",
+              "image/webp"
+            ].includes(
+              file.type
+            )
+          ){
+
+            showMsg(
+              imgMsg,
+              "PNG, JPEG, WEBP 이미지만 사용할 수 있어요.",
+              "error"
+            );
+
+
+            return;
+
+          }
+
+
+          const reader =
+            new FileReader();
+
+
+          reader.onload =
+            function(event){
+
+              createImageElement(
+                event.target.result,
+                file.name
+              );
+
+            };
+
+
+          reader.onerror =
+            function(){
+
+              showMsg(
+                imgMsg,
+                "이미지를 읽지 못했습니다. 기존 작업은 유지됩니다.",
+                "error"
+              );
+
+            };
+
+
+          reader.readAsDataURL(
+            file
+          );
+
+        }
+      );
+
+
+      this.value =
+        "";
+
+    }
+  );
+
+
+/* =========================================================
+   IMAGE ASSETS
+========================================================= */
+
+function renderImageAssets(){
+
+  imageAssetGrid.innerHTML =
+    "";
+
+
+  ASSET_MANIFEST.images
+    .forEach(
+      item=>{
+
+        const button =
+          document.createElement(
+            "button"
+          );
+
+
+        button.type =
+          "button";
+
+
+        button.className =
+          "asset-card";
+
+
+        const image =
+          document.createElement(
+            "img"
+          );
+
+
+        image.src =
+          item.src;
+
+
+        image.alt =
+          item.name;
+
+
+        image.onerror =
+          function(){
+
+            button.remove();
+
+          };
+
+
+        const name =
+          document.createElement(
+            "span"
+          );
+
+
+        name.className =
+          "asset-name";
+
+
+        name.textContent =
+          item.name;
+
+
+        button.appendChild(
+          image
+        );
+
+
+        button.appendChild(
+          name
+        );
+
+
+        button.addEventListener(
+          "click",
+          function(){
+
+            createImageElement(
+              item.src,
+              item.name
+            );
+
+          }
+        );
+
+
+        imageAssetGrid.appendChild(
+          button
+        );
+
+      }
+    );
+
+}
+
+
+/* =========================================================
+   STICKER ASSETS
+========================================================= */
+
+function renderStickerAssets(){
+
+  stickerAssetGrid.innerHTML =
+    "";
+
+
+  TEST_STICKERS.forEach(
+    sticker=>{
+
+      const button =
+        document.createElement(
+          "button"
+        );
+
+
+      button.type =
+        "button";
+
+
+      button.className =
+        "asset-card";
+
+
+      const emoji =
+        document.createElement(
+          "span"
+        );
+
+
+      emoji.className =
+        "asset-emoji";
+
+
+      emoji.textContent =
+        sticker.emoji;
+
+
+      const name =
+        document.createElement(
+          "span"
+        );
+
+
+      name.className =
+        "asset-name";
+
+
+      name.textContent =
+        sticker.name;
+
+
+      button.appendChild(
+        emoji
+      );
+
+
+      button.appendChild(
+        name
+      );
+
+
+      button.addEventListener(
+        "click",
+        function(){
+
+          createStickerElement(
+            sticker.emoji,
+            sticker.name
+          );
+
+        }
+      );
+
+
+      stickerAssetGrid.appendChild(
+        button
+      );
+
+    }
+  );
+
+
+  ASSET_MANIFEST.stickers
+    .forEach(
+      item=>{
+
+        const button =
+          document.createElement(
+            "button"
+          );
+
+
+        button.type =
+          "button";
+
+
+        button.className =
+          "asset-card";
+
+
+        const image =
+          document.createElement(
+            "img"
+          );
+
+
+        image.src =
+          item.src;
+
+
+        image.alt =
+          item.name;
+
+
+        image.onerror =
+          function(){
+
+            button.remove();
+
+          };
+
+
+        const name =
+          document.createElement(
+            "span"
+          );
+
+
+        name.className =
+          "asset-name";
+
+
+        name.textContent =
+          item.name;
+
+
+        button.appendChild(
+          image
+        );
+
+
+        button.appendChild(
+          name
+        );
+
+
+        button.addEventListener(
+          "click",
+          function(){
+
+            const imageObject =
+              new Image();
+
+
+            imageObject.onload =
+              function(){
+
+                const element = {
+
+                  id:
+                    uid("sticker"),
+
+                  type:
+                    "sticker",
+
+                  name:
+                    item.name,
+
+                  src:
+                    item.src,
+
+                  imageEl:
+                    imageObject,
+
+                  content:
+                    "",
+
+                  x:
+                    50,
+
+                  y:
+                    50,
+
+                  size:
+                    180,
+
+                  rotation:
+                    0,
+
+                  opacity:
+                    100,
+
+                  shadow:
+                    true,
+
+                  flipX:
+                    false,
+
+                  flipY:
+                    false,
+
+                  z:
+                    state.nextZ++
+
+                };
+
+
+                state.elements.push(
+                  element
+                );
+
+
+                state.selectedId =
+                  element.id;
+
+
+                syncInspector();
+
+                renderLayers();
+
+                render();
+
+              };
+
+
+            imageObject.src =
+              item.src;
+
+          }
+        );
+
+
+        stickerAssetGrid.appendChild(
+          button
+        );
+
+      }
+    );
+
+}
+
+
+/* =========================================================
+   CANVAS MOVE
+========================================================= */
+
+let interaction =
+  null;
+
+
+canvas.addEventListener(
+  "mousedown",
+  function(e){
+
+    if(
+      e.button !==
+      0
+    ){
+
+      return;
+
+    }
+
+
+    const point =
+      pointFromEvent(
+        e
+      );
+
+
+    const hit =
+      hitTest(
+        point
+      );
+
+
+    if(!hit){
+
+      state.selectedId =
+        null;
+
+
+      syncInspector();
+
+      renderLayers();
+
+      render();
+
+      return;
+
+    }
+
+
+    selectElement(
+      hit.id
+    );
+
+
+    interaction = {
+
+      type:
+        "move",
+
+      id:
+        hit.id,
+
+      startX:
+        point.x,
+
+      startY:
+        point.y,
+
+      originalX:
+        hit.x,
+
+      originalY:
+        hit.y
+
+    };
+
+
+    e.preventDefault();
+
+  }
+);
+
+
+/* =========================================================
+   MOVE
+========================================================= */
+
+window.addEventListener(
+  "mousemove",
+  function(e){
+
+    if(
+      !interaction ||
+      interaction.type !==
+      "move"
+    ){
+
+      return;
+
+    }
+
+
+    const el =
+      state.elements.find(
+        item =>
+          item.id ===
+          interaction.id
+      );
+
+
+    if(!el){
+      return;
+    }
+
+
+    const point =
+      pointFromEvent(
+        e
+      );
+
+
+    el.x =
+      clamp(
+        interaction.originalX +
+        (
+          point.x -
+          interaction.startX
+        ),
+        0,
+        100
+      );
+
+
+    el.y =
+      clamp(
+        interaction.originalY +
+        (
+          point.y -
+          interaction.startY
+        ),
+        0,
+        100
+      );
+
+
+    syncInspector();
+
+    render();
+
+  }
+);
+
+
+/* =========================================================
+   RESIZE
+========================================================= */
+
+selectionBox
+  .querySelectorAll(
+    ".selection-handle"
+  )
+  .forEach(
+    handle=>{
+
+      handle.addEventListener(
+        "mousedown",
+        function(e){
+
+          const el =
+            getSelected();
+
+
+          if(!el){
+            return;
+          }
+
+
+          const point =
+            pointFromEvent(
+              e
+            );
+
+
+          interaction = {
+
+            type:
+              "resize",
+
+            handle:
+              handle.dataset.handle,
+
+            id:
+              el.id,
+
+            startX:
+              point.x,
+
+            startY:
+              point.y,
+
+            originalX:
+              el.x,
+
+            originalY:
+              el.y,
+
+            originalSize:
+              (
+                el.type === "text" ||
+                el.type === "sticker"
+              )
+                ? el.size
+                : null,
+
+            originalWidth:
+              el.type === "image"
+                ? el.width
+                : null,
+
+            originalHeight:
+              el.type === "image"
+                ? el.height
+                : null
+
+          };
+
+
+          e.stopPropagation();
+
+          e.preventDefault();
+
+        }
+      );
+
+    }
+  );
+
+
+window.addEventListener(
+  "mousemove",
+  function(e){
+
+    if(
+      !interaction ||
+      interaction.type !==
+      "resize"
+    ){
+
+      return;
+
+    }
+
+
+    const el =
+      state.elements.find(
+        item =>
+          item.id ===
+          interaction.id
+      );
+
+
+    if(!el){
+      return;
+    }
+
+
+    const point =
+      pointFromEvent(
+        e
+      );
+
+
+    const dims =
+      getDims();
+
+
+    const dx =
+      (
+        point.x -
+        interaction.startX
+      ) *
+      dims.w /
+      100;
+
+
+    const dy =
+      (
+        point.y -
+        interaction.startY
+      ) *
+      dims.h /
+      100;
+
+
+    if(
+      el.type === "text" ||
+      el.type === "sticker"
+    ){
+
+      let delta =
+        dx;
+
+
+      if(
+        !interaction.handle.includes(
+          "e"
+        ) &&
+        !interaction.handle.includes(
+          "w"
+        )
+      ){
+
+        delta =
+          dy;
+
+      }
+
+
+      if(
+        interaction.handle.includes(
+          "w"
+        ) ||
+        interaction.handle.includes(
+          "n"
+        )
+      ){
+
+        delta =
+          -delta;
+
+      }
+
+
+      const minSize =
+        el.type ===
+          "text"
+          ? 16
+          : 20;
+
+
+      const maxSize =
+        el.type ===
+          "text"
+          ? 500
+          : 1000;
+
+
+      el.size =
+        clamp(
+          interaction.originalSize +
+          delta,
+          minSize,
+          maxSize
+        );
+
+    }
+
+
+    if(
+      el.type ===
+      "image"
+    ){
+
+      let width =
+        interaction.originalWidth;
+
+
+      let height =
+        interaction.originalHeight;
+
+
+      if(
+        interaction.handle.includes(
+          "e"
+        )
+      ){
+
+        width +=
+          dx;
+
+      }
+
+
+      if(
+        interaction.handle.includes(
+          "w"
+        )
+      ){
+
+        width -=
+          dx;
+
+
+        el.x =
+          clamp(
+            interaction.originalX +
+            (
+              dx /
+              dims.w *
+              100
+            ) / 2,
+            0,
+            100
+          );
+
+      }
+
+
+      if(
+        interaction.handle.includes(
+          "s"
+        )
+      ){
+
+        height +=
+          dy;
+
+      }
+
+
+      if(
+        interaction.handle.includes(
+          "n"
+        )
+      ){
+
+        height -=
+          dy;
+
+
+        el.y =
+          clamp(
+            interaction.originalY +
+            (
+              dy /
+              dims.h *
+              100
+            ) / 2,
+            0,
+            100
+          );
+
+      }
+
+
+      el.width =
+        clamp(
+          width,
+          5,
+          300
+        );
+
+
+      el.height =
+        clamp(
+          height,
+          5,
+          300
+        );
+
+
+      el.fit =
+        "contain";
+
+
+      el.scale =
+        el.originalWidth
+          ? (
+              el.width /
+              el.originalWidth *
+              100
+            )
+          : 100;
+
+    }
+
+
+    syncInspector();
+
+    render();
+
+  }
+);
+
+
+/* =========================================================
+   ROTATION
+========================================================= */
+
+rotationHandle
+  .addEventListener(
+    "mousedown",
+    function(e){
+
+      const el =
+        getSelected();
+
+
+      if(!el){
+        return;
+      }
+
+
+      const rect =
+        selectionBox
+          .getBoundingClientRect();
+
+
+      interaction = {
+
+        type:
+          "rotate",
+
+        id:
+          el.id,
+
+        centerX:
+          rect.left +
+          rect.width/2,
+
+        centerY:
+          rect.top +
+          rect.height/2
+
+      };
+
+
+      e.stopPropagation();
+
+      e.preventDefault();
+
+    }
+  );
+
+
+window.addEventListener(
+  "mousemove",
+  function(e){
+
+    if(
+      !interaction ||
+      interaction.type !==
+      "rotate"
+    ){
+
+      return;
+
+    }
+
+
+    const el =
+      state.elements.find(
+        item =>
+          item.id ===
+          interaction.id
+      );
+
+
+    if(!el){
+      return;
+    }
+
+
+    const angle =
+      Math.atan2(
+        e.clientY -
+        interaction.centerY,
+        e.clientX -
+        interaction.centerX
+      ) *
+      180 /
+      Math.PI;
+
+
+    el.rotation =
+      clamp(
+        Math.round(
+          angle + 90
+        ),
+        -180,
+        180
+      );
+
+
+    syncInspector();
+
+    render();
+
+  }
+);
+
+
+/* =========================================================
+   MOUSE UP
+========================================================= */
+
+window.addEventListener(
+  "mouseup",
+  function(){
+
+    interaction =
+      null;
+
+  }
+);
+
+
+/* =========================================================
+   DOUBLE CLICK TEXT
+========================================================= */
+
+canvas.addEventListener(
+  "dblclick",
+  function(e){
+
+    const point =
+      pointFromEvent(
+        e
+      );
+
+
+    const hit =
+      hitTest(
+        point
+      );
+
+
+    if(
+      hit &&
+      hit.type ===
+      "text"
+    ){
+
+      selectElement(
+        hit.id
+      );
+
+
+      $("textInput")
+        .focus();
+
+
+      $("textInput")
+        .select();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   TOOLBAR
+========================================================= */
+
+$("toolbarDuplicate")
+  .addEventListener(
+    "click",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(el){
+
+        duplicateElement(
+          el.id
+        );
+
+      }
+
+    }
+  );
+
+
+$("toolbarDelete")
+  .addEventListener(
+    "click",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(el){
+
+        deleteElement(
+          el.id
+        );
+
+      }
+
+    }
+  );
+
+
+$("toolbarFront")
+  .addEventListener(
+    "click",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(el){
+
+        moveLayerOneStep(
+          el.id,
+          "front"
+        );
+
+      }
+
+    }
+  );
+
+
+$("toolbarBack")
+  .addEventListener(
+    "click",
+    function(){
+
+      const el =
+        getSelected();
+
+
+      if(el){
+
+        moveLayerOneStep(
+          el.id,
+          "back"
+        );
+
+      }
+
+    }
+  );
+
+
+/* =========================================================
+   ADD IMAGE BUTTON
+========================================================= */
+
+$("leftAddImageBtn")
+  .addEventListener(
+    "click",
+    function(){
+
+      imageFileInput.click();
+
+    }
+  );
+
+
+/* =========================================================
+   KEYBOARD
+========================================================= */
+
+document.addEventListener(
+  "keydown",
+  function(e){
+
+    const activeTag =
+      document.activeElement
+        ? document.activeElement.tagName
+        : "";
+
+
+    if(
+      activeTag ===
+        "INPUT" ||
+      activeTag ===
+        "TEXTAREA" ||
+      activeTag ===
+        "SELECT"
+    ){
+
+      return;
+
+    }
+
+
+    const el =
+      getSelected();
+
+
+    if(!el){
+      return;
+    }
+
+
+    if(
+      e.key ===
+        "Delete" ||
+      e.key ===
+        "Backspace"
+    ){
+
+      deleteElement(
+        el.id
+      );
+
+
+      e.preventDefault();
+
+      return;
+
+    }
+
+
+    if(
+      (
+        e.ctrlKey ||
+        e.metaKey
+      ) &&
+      e.key.toLowerCase() ===
+        "d"
+    ){
+
+      duplicateElement(
+        el.id
+      );
+
+
+      e.preventDefault();
+
+      return;
+
+    }
+
+
+    const step =
+      e.shiftKey
+        ? 5
+        : 1;
+
+
+    let changed =
+      false;
+
+
+    if(
+      e.key ===
+      "ArrowLeft"
+    ){
+
+      el.x =
+        clamp(
+          el.x-step,
+          0,
+          100
+        );
+
+
+      changed =
+        true;
+
+    }
+
+
+    if(
+      e.key ===
+      "ArrowRight"
+    ){
+
+      el.x =
+        clamp(
+          el.x+step,
+          0,
+          100
+        );
+
+
+      changed =
+        true;
+
+    }
+
+
+    if(
+      e.key ===
+      "ArrowUp"
+    ){
+
+      el.y =
+        clamp(
+          el.y-step,
+          0,
+          100
+        );
+
+
+      changed =
+        true;
+
+    }
+
+
+    if(
+      e.key ===
+      "ArrowDown"
+    ){
+
+      el.y =
+        clamp(
+          el.y+step,
+          0,
+          100
+        );
+
+
+      changed =
+        true;
+
+    }
+
+
+    if(changed){
+
+      syncInspector();
+
+      render();
+
+      e.preventDefault();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   TEMPLATES
+========================================================= */
+
+function serializableElements(){
+
+  return state.elements.map(
+    element=>{
+
+      const copy =
+        {
+          ...element
+        };
+
+
+      delete copy.imageEl;
+
+
+      return copy;
+
+    }
+  );
+
+}
+
+
+function loadTemplates(){
+
+  try{
+
+    const raw =
+      localStorage.getItem(
+        STORAGE_KEY
+      );
+
+
+    if(!raw){
+      return [];
+    }
+
+
+    const parsed =
+      JSON.parse(
+        raw
+      );
+
+
+    return Array.isArray(
+      parsed
+    )
+      ? parsed
+      : [];
+
+  }catch(error){
+
+    return [];
+
+  }
+
+}
+
+
+function saveTemplates(
+  list
+){
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(
+      list
+    )
+  );
+
+}
+
+
+function isValidImportedElement(
+  el
+){
+
+  if(
+    typeof el !== "object" ||
+    el === null
+  ){
+
+    return false;
+
+  }
+
+
+  if(
+    typeof el.id !== "string" ||
+    !el.id
+  ){
+
+    return false;
+
+  }
+
+
+  if(
+    ["text","image","sticker"].indexOf(
+      el.type
+    ) === -1
+  ){
+
+    return false;
+
+  }
+
+
+  if(
+    typeof el.x !== "number" ||
+    typeof el.y !== "number"
+  ){
+
+    return false;
+
+  }
+
+
+  if(
+    el.type === "text"
+  ){
+
+    if(
+      typeof el.content !== "string"
+    ){
+
+      return false;
+
+    }
+
+
+    if(
+      typeof el.size !== "number"
+    ){
+
+      return false;
+
+    }
+
+
+    if(
+      typeof el.color !== "string"
+    ){
+
+      return false;
+
+    }
+
+  }
+
+
+  if(
+    el.type === "image"
+  ){
+
+    if(
+      typeof el.src !== "string" ||
+      !el.src
+    ){
+
+      return false;
+
+    }
+
+
+    if(
+      typeof el.width !== "number" ||
+      typeof el.height !== "number"
+    ){
+
+      return false;
+
+    }
+
+  }
+
+
+  if(
+    el.type === "sticker"
+  ){
+
+    if(
+      typeof el.size !== "number"
+    ){
+
+      return false;
+
+    }
+
+
+    if(
+      typeof el.content !== "string" &&
+      typeof el.src !== "string"
+    ){
+
+      return false;
+
+    }
+
+  }
+
+
+  return true;
+
+}
+
+
+function isValidImportedTemplate(
+  t
+){
+
+  if(
+    typeof t !== "object" ||
+    t === null
+  ){
+
+    return false;
+
+  }
+
+
+  if(
+    typeof t.id !== "string" ||
+    !t.id
+  ){
+
+    return false;
+
+  }
+
+
+  if(
+    typeof t.name !== "string" ||
+    !t.name
+  ){
+
+    return false;
+
+  }
+
+
+  if(
+    !ASPECTS[t.aspect]
+  ){
+
+    return false;
+
+  }
+
+
+  if(
+    !Array.isArray(t.elements)
+  ){
+
+    return false;
+
+  }
+
+
+  return t.elements.every(
+    isValidImportedElement
+  );
+
+}
+
+
+$("saveTemplateBtn")
+  .addEventListener(
+    "click",
+    function(){
+
+      const input =
+        $("templateNameInput");
+
+
+      const name =
+        input.value.trim();
+
+
+      if(!name){
+
+        showMsg(
+          templateMsg,
+          "템플릿 이름을 입력해주세요.",
+          "error"
+        );
+
+
+        return;
+
+      }
+
+
+      const template = {
+
+        id:
+          uid("tpl"),
+
+        version:
+          1,
+
+        name,
+
+        aspect:
+          state.aspect,
+
+        background:{
+
+          mode:
+            state.background.mode,
+
+          color:
+            state.background.color
+
+        },
+
+        elements:
+          serializableElements(),
+
+        updatedAt:
+          Date.now()
+
+      };
+
+
+      const list =
+        loadTemplates();
+
+
+      list.push(
+        template
+      );
+
+
+      try{
+
+        saveTemplates(
+          list
+        );
+
+      }catch(error){
+
+        showMsg(
+          templateMsg,
+          "템플릿을 저장하지 못했습니다.",
+          "error"
+        );
+
+
+        return;
+
+      }
+
+
+      input.value =
+        "";
+
+
+      showMsg(
+        templateMsg,
+        '"' +
+        name +
+        '" 템플릿을 저장했어요.',
+        "ok"
+      );
+
+
+      renderTemplateGrid();
+
+    }
+  );
+
+
+function renderTemplateGrid(){
+
+  templateGrid.innerHTML =
+    "";
+
+
+  const templates =
+    loadTemplates();
+
+
+  if(!templates.length){
+
+    const empty =
+      document.createElement(
+        "p"
+      );
+
+
+    empty.className =
+      "dim small";
+
+
+    empty.textContent =
+      "저장된 템플릿이 없어요.";
+
+
+    templateGrid.appendChild(
+      empty
+    );
+
+
+    return;
+
+  }
+
+
+  templates.forEach(
+    template=>{
+
+      const card =
+        document.createElement(
+          "div"
+        );
+
+
+      card.className =
+        "template-item";
+
+
+      const name =
+        document.createElement(
+          "div"
+        );
+
+
+      name.className =
+        "t-name";
+
+
+      name.textContent =
+        template.name;
+
+
+      const meta =
+        document.createElement(
+          "div"
+        );
+
+
+      meta.className =
+        "t-meta mono";
+
+
+      meta.textContent =
+        (
+          template.aspect ||
+          "1:1"
+        ) +
+        " · " +
+        new Date(
+          template.updatedAt ||
+          Date.now()
+        ).toLocaleDateString(
+          "ko-KR"
+        );
+
+
+      const actions =
+        document.createElement(
+          "div"
+        );
+
+
+      actions.className =
+        "t-actions";
+
+
+      const loadBtn =
+        document.createElement(
+          "button"
+        );
+
+
+      loadBtn.type =
+        "button";
+
+
+      loadBtn.className =
+        "btn small";
+
+
+      loadBtn.textContent =
+        "불러오기";
+
+
+      loadBtn.addEventListener(
+        "click",
+        function(){
+
+          loadTemplate(
+            template
+          );
+
+        }
+      );
+
+
+      const renameBtn =
+        document.createElement(
+          "button"
+        );
+
+
+      renameBtn.type =
+        "button";
+
+
+      renameBtn.className =
+        "btn small ghost";
+
+
+      renameBtn.textContent =
+        "이름수정";
+
+
+      renameBtn.addEventListener(
+        "click",
+        function(){
+
+          const newName =
+            window.prompt(
+              "새 템플릿 이름",
+              template.name
+            );
+
+
+          if(
+            newName === null
+          ){
+
+            return;
+
+          }
+
+
+          const trimmed =
+            newName.trim();
+
+
+          if(
+            !trimmed
+          ){
+
+            showMsg(
+              templateMsg,
+              "템플릿 이름을 입력해주세요.",
+              "error"
+            );
+
+
+            return;
+
+          }
+
+
+          const list =
+            loadTemplates();
+
+
+          const index =
+            list.findIndex(
+              item =>
+                item.id ===
+                template.id
+            );
+
+
+          if(
+            index === -1
+          ){
+
+            return;
+
+          }
+
+
+          list[index].name =
+            trimmed;
+
+
+          list[index].updatedAt =
+            Date.now();
+
+
+          saveTemplates(
+            list
+          );
+
+
+          renderTemplateGrid();
+
+
+          showMsg(
+            templateMsg,
+            '"' +
+            trimmed +
+            '"(으)로 이름을 바꿨어요.',
+            "ok"
+          );
+
+        }
+      );
+
+
+      const deleteBtn =
+        document.createElement(
+          "button"
+        );
+
+
+      deleteBtn.type =
+        "button";
+
+
+      deleteBtn.className =
+        "btn small danger";
+
+
+      deleteBtn.textContent =
+        "삭제";
+
+
+      deleteBtn.addEventListener(
+        "click",
+        function(){
+
+          if(
+            !confirm(
+              '"' +
+              template.name +
+              '" 템플릿을 삭제할까요?'
+            )
+          ){
+
+            return;
+
+          }
+
+
+          const next =
+            loadTemplates()
+              .filter(
+                item =>
+                  item.id !==
+                  template.id
+              );
+
+
+          saveTemplates(
+            next
+          );
+
+
+          renderTemplateGrid();
+
+        }
+      );
+
+
+      actions.appendChild(
+        loadBtn
+      );
+
+
+      actions.appendChild(
+        renameBtn
+      );
+
+
+      actions.appendChild(
+        deleteBtn
+      );
+
+
+      card.appendChild(
+        name
+      );
+
+
+      card.appendChild(
+        meta
+      );
+
+
+      card.appendChild(
+        actions
+      );
+
+
+      templateGrid.appendChild(
+        card
+      );
+
+    }
+  );
+
+}
+
+
+function loadTemplate(
+  template
+){
+
+  state.aspect =
+    template.aspect ||
+    "1:1";
+
+
+  state.background =
+    template.background &&
+    typeof template.background ===
+    "object"
+      ? {
+
+          mode:
+            template.background.mode ===
+            "transparent"
+              ? "transparent"
+              : "color",
+
+          color:
+            template.background.color ||
+            "#ffffff"
+
+        }
+      : {
+
+          mode:"color",
+
+          color:"#ffffff"
+
+        };
+
+
+  state.elements =
+    [];
+
+
+  state.nextZ =
+    1;
+
+
+  const source =
+    Array.isArray(
+      template.elements
+    )
+      ? template.elements
+      : [];
+
+
+  source.forEach(
+    data=>{
+
+      const element =
+        {
+          ...data
+        };
+
+
+      element.x =
+        Number(
+          element.x
+        ) || 50;
+
+
+      element.y =
+        Number(
+          element.y
+        ) || 50;
+
+
+      element.z =
+        Number(
+          element.z
+        ) ||
+        state.nextZ;
+
+
+      if(
+        element.type ===
+        "text"
+      ){
+
+        element.bold =
+          element.bold ??
+          true;
+
+
+        element.italic =
+          element.italic ??
+          false;
+
+
+        element.underline =
+          element.underline ??
+          false;
+
+
+        element.outline =
+          element.outline ??
+          true;
+
+
+        element.outlineWidth =
+          element.outlineWidth ??
+          6;
+
+
+        element.outlineColor =
+          element.outlineColor ||
+          "#000000";
+
+
+        element.shadow =
+          element.shadow ??
+          false;
+
+
+        element.shadowColor =
+          element.shadowColor ||
+          "#000000";
+
+
+        element.shadowAngle =
+          element.shadowAngle ??
+          315;
+
+
+        element.shadowOpacity =
+          element.shadowOpacity ??
+          40;
+
+
+        element.shadowDistance =
+          element.shadowDistance ??
+          10;
+
+
+        element.shadowBlur =
+          element.shadowBlur ??
+          11;
+
+
+        element.vertical =
+          element.vertical ??
+          false;
+
+
+        element.opacity =
+          element.opacity ??
+          100;
+
+      }
+
+
+      if(
+        element.type ===
+        "image"
+      ){
+
+        element.originalWidth =
+          element.originalWidth ??
+          element.width;
+
+
+        element.originalHeight =
+          element.originalHeight ??
+          element.height;
+
+
+        element.scale =
+          element.scale ??
+          100;
+
+
+        element.fit =
+          element.fit ??
+          "contain";
+
+
+        if(
+          element.src
+        ){
+
+          const image =
+            new Image();
+
+
+          image.onload =
+            function(){
+
+              element.imageEl =
+                image;
+
+
+              render();
+
+            };
+
+
+          image.onerror =
+            function(){
+
+              showMsg(
+                templateMsg,
+                '"' +
+                (element.name || "이미지") +
+                '" 이미지를 불러오지 못했어요.',
+                "error"
+              );
+
+            };
+
+
+          image.src =
+            element.src;
+
+        }
+
+      }
+
+
+      if(
+        element.type ===
+        "sticker"
+      ){
+
+        element.flipX =
+          element.flipX ??
+          false;
+
+
+        element.flipY =
+          element.flipY ??
+          false;
+
+      }
+
+
+      state.elements.push(
+        element
+      );
+
+
+      state.nextZ =
+        Math.max(
+          state.nextZ,
+          element.z + 1
+        );
+
+    }
+  );
+
+
+  document
+    .querySelectorAll(
+      ".size-card"
+    )
+    .forEach(
+      button=>{
+
+        button.classList.toggle(
+          "active",
+          button.dataset.aspect ===
+          state.aspect
+        );
+
+      }
+    );
+
+
+  state.selectedId =
+    state.elements.length
+      ? state.elements[
+          state.elements.length-1
+        ].id
+      : null;
+
+
+  updateCrumb();
+
+  syncBgUI();
+
+  renderLayers();
+
+  syncInspector();
+
+  render();
+
+
+  showMsg(
+    templateMsg,
+    '"' +
+    template.name +
+    '" 템플릿을 불러왔어요.',
+    "ok"
+  );
+
+}
+
+
+/* =========================================================
+   PNG / JPEG DOWNLOAD
+========================================================= */
+
+function waitFontsReady(){
+
+  if(
+    document.fonts &&
+    document.fonts.ready
+  ){
+
+    return document.fonts.ready;
+
+  }
+
+
+  return Promise.resolve();
+
+}
+
+
+function downloadCanvas(
+  mime,
+  ext,
+  quality
+){
+
+  waitFontsReady().then(
+    function(){
+
+      render();
+
+
+      const output =
+        document.createElement(
+          "canvas"
+        );
+
+
+      output.width =
+        canvas.width;
+
+
+      output.height =
+        canvas.height;
+
+
+      const ctx =
+        output.getContext(
+          "2d"
+        );
+
+
+      /*
+        JPEG는 투명도를 지원하지 않아서,
+        배경이 투명 모드일 때 그냥 두면
+        브라우저가 검은색으로 채워버림.
+        미리 흰색으로 안전하게 채워둠.
+      */
+
+      if(
+        mime === "image/jpeg" &&
+        state.background.mode ===
+        "transparent"
+      ){
+
+        ctx.fillStyle =
+          "#FFFFFF";
+
+
+        ctx.fillRect(
+          0,
+          0,
+          output.width,
+          output.height
+        );
+
+      }
+
+
+      ctx.drawImage(
+        canvas,
+        0,
+        0
+      );
+
+
+      output.toBlob(
+        function(blob){
+
+          if(!blob){
+            return;
+          }
+
+
+          const url =
+            URL.createObjectURL(
+              blob
+            );
+
+
+          const anchor =
+            document.createElement(
+              "a"
+            );
+
+
+          const timestamp =
+            new Date()
+              .toISOString()
+              .replace(
+                /[:.]/g,
+                "-"
+              );
+
+
+          anchor.href =
+            url;
+
+
+          anchor.download =
+            "mixit_" +
+            state.aspect.replace(
+              ":",
+              "x"
+            ) +
+            "_" +
+            timestamp +
+            "." +
+            ext;
+
+
+          document.body.appendChild(
+            anchor
+          );
+
+
+          anchor.click();
+
+
+          anchor.remove();
+
+
+          setTimeout(
+            function(){
+
+              URL.revokeObjectURL(
+                url
+              );
+
+            },
+            2000
+          );
+
+        },
+        mime,
+        quality
+      );
+
+    }
+  );
+
+}
+
+
+$("downloadPngBtn")
+  .addEventListener(
+    "click",
+    function(){
+
+      downloadCanvas(
+        "image/png",
+        "png"
+      );
+
+    }
+  );
+
+
+$("downloadJpgBtn")
+  .addEventListener(
+    "click",
+    function(){
+
+      downloadCanvas(
+        "image/jpeg",
+        "jpg",
+        0.92
+      );
+
+    }
+  );
+
+
+/* =========================================================
+   JSON EXPORT
+========================================================= */
+
+$("exportJsonBtn")
+  .addEventListener(
+    "click",
+    function(){
+
+      const blob =
+        new Blob(
+          [
+            JSON.stringify(
+              loadTemplates(),
+              null,
+              2
+            )
+          ],
+          {
+            type:
+              "application/json"
+          }
+        );
+
+
+      const url =
+        URL.createObjectURL(
+          blob
+        );
+
+
+      const anchor =
+        document.createElement(
+          "a"
+        );
+
+
+      anchor.href =
+        url;
+
+
+      anchor.download =
+        "mixit_templates.json";
+
+
+      document.body.appendChild(
+        anchor
+      );
+
+
+      anchor.click();
+
+
+      anchor.remove();
+
+
+      setTimeout(
+        function(){
+
+          URL.revokeObjectURL(
+            url
+          );
+
+        },
+        2000
+      );
+
+    }
+  );
+
+
+/* =========================================================
+   JSON IMPORT
+========================================================= */
+
+$("importJsonBtn")
+  .addEventListener(
+    "click",
+    function(){
+
+      $("jsonInput").click();
+
+    }
+  );
+
+
+$("jsonInput")
+  .addEventListener(
+    "change",
+    function(e){
+
+      const file =
+        e.target.files[0];
+
+
+      if(!file){
+        return;
+      }
+
+
+      const reader =
+        new FileReader();
+
+
+      reader.onload =
+        function(){
+
+          let parsed;
+
+
+          try{
+
+            parsed =
+              JSON.parse(
+                reader.result
+              );
+
+          }catch(error){
+
+            showMsg(
+              templateMsg,
+              "JSON 문법이 손상되어 가져오지 못했어요. 기존 템플릿은 유지됩니다.",
+              "error"
+            );
+
+
+            return;
+
+          }
+
+
+          if(
+            !Array.isArray(
+              parsed
+            )
+          ){
+
+            showMsg(
+              templateMsg,
+              "JSON 형식이 올바르지 않아요(배열이어야 함). 기존 템플릿은 유지됩니다.",
+              "error"
+            );
+
+
+            return;
+
+          }
+
+
+          if(
+            !parsed.every(
+              isValidImportedTemplate
+            )
+          ){
+
+            showMsg(
+              templateMsg,
+              "필수 항목이 빠지거나 형식이 잘못된 템플릿이 있어 가져오지 못했어요. 기존 템플릿은 유지됩니다.",
+              "error"
+            );
+
+
+            return;
+
+          }
+
+
+          const imported =
+            parsed.map(
+              template=>({
+
+                ...template,
+
+                id:
+                  uid("tpl")
+
+              })
+            );
+
+
+          try{
+
+            saveTemplates(
+              loadTemplates()
+                .concat(
+                  imported
+                )
+            );
+
+          }catch(error){
+
+            showMsg(
+              templateMsg,
+              "저장 공간이 부족해서 가져오지 못했어요. 기존 템플릿은 유지됩니다.",
+              "error"
+            );
+
+
+            return;
+
+          }
+
+
+          renderTemplateGrid();
+
+
+          showMsg(
+            templateMsg,
+            imported.length +
+            "개의 템플릿을 가져왔어요.",
+            "ok"
+          );
+
+        };
+
+
+      reader.readAsText(
+        file
+      );
+
+
+      this.value =
+        "";
+
+    }
+  );
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+activateTab(
+  "aspect"
+);
+
+
+updateCrumb();
+
+syncBgUI();
+
+renderLayers();
+
+syncInspector();
+
+renderTemplateGrid();
+
+renderImageAssets();
+
+renderStickerAssets();
+
+render();
+
+
+if(
+  document.fonts &&
+  document.fonts.ready
+){
+
+  document.fonts.ready.then(
+    render
+  );
+
+}
+
+
+/* =========================================================
+   RESIZE
+========================================================= */
+
+window.addEventListener(
+  "resize",
+  function(){
+
+    updateSelectionBox();
+
+  }
+);
+
+
+/* =========================================================
+   BIND COLLAPSES
+========================================================= */
+
+bindCollapseToggle(
+  "outlineToggle",
+  "outlineBody"
+);
+
+
+bindCollapseToggle(
+  "textShadowToggle",
+  "shadowBody"
+);
+
+
+bindCollapseToggle(
+  "curveToggle",
+  "curveBody"
+);
+
+})();
+</script>
+
+</body>
+</html>

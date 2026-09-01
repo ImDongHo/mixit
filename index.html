@@ -9804,6 +9804,19 @@ selectionBox
             );
 
 
+          const dims =
+            getDims();
+
+
+          const startBounds =
+            (
+              el.type === "text" ||
+              el.type === "sticker"
+            )
+              ? getObjectBounds(el)
+              : null;
+
+
           interaction = {
 
             type:
@@ -9833,6 +9846,18 @@ selectionBox
                 el.type === "sticker"
               )
                 ? el.size
+                : null,
+
+            originalBoundsWidthPct:
+              startBounds
+                ? startBounds.width /
+                  dims.w * 100
+                : null,
+
+            originalBoundsHeightPct:
+              startBounds
+                ? startBounds.height /
+                  dims.h * 100
                 : null,
 
             originalWidth:
@@ -10010,6 +10035,69 @@ window.addEventListener(
           minSize,
           maxSize
         );
+
+
+      /*
+        크기가 바뀌면 텍스트/스티커는
+        항상 el.x,el.y(중심)를 기준으로
+        사방으로 커지기 때문에, 반대쪽
+        모서리가 고정되지 않고 같이
+        움직여서 "반대로 드래그되는 것"
+        처럼 느껴졌음. 이미지처럼 드래그
+        안 한 반대쪽을 고정시키도록 보정.
+      */
+
+      if(
+        interaction.originalBoundsWidthPct !=
+          null &&
+        interaction.originalBoundsHeightPct !=
+          null
+      ){
+
+        const newBounds =
+          getObjectBounds(el);
+
+        const newWidthPct =
+          newBounds.width /
+          dims.w * 100;
+
+        const newHeightPct =
+          newBounds.height /
+          dims.h * 100;
+
+        const anchorX =
+          interaction.originalX -
+          ux *
+          (
+            interaction.originalBoundsWidthPct /
+            2
+          );
+
+        const anchorY =
+          interaction.originalY -
+          uy *
+          (
+            interaction.originalBoundsHeightPct /
+            2
+          );
+
+        el.x =
+          clamp(
+            anchorX +
+            ux * newWidthPct / 2,
+            0,
+            100
+          );
+
+        el.y =
+          clamp(
+            anchorY +
+            uy * newHeightPct / 2,
+            0,
+            100
+          );
+
+      }
 
     }
 

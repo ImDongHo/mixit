@@ -3420,14 +3420,55 @@ const ASSET_MANIFEST = {
   ],
 
   stickers:[
-    /*
-      예:
 
-      {
-        name:"불꽃",
-        src:"assets/stickers/fire.png"
-      }
-    */
+    {name:"하트", src:"images/sticker/01_heart.png"},
+    {name:"반짝반짝", src:"images/sticker/02_sparkles.png"},
+    {name:"굿", src:"images/sticker/03_good.png"},
+    {name:"불꽃", src:"images/sticker/04_flame.png"},
+    {name:"커서", src:"images/sticker/05_cursor.png"},
+    {name:"선글라스", src:"images/sticker/06_sunglasses.png"},
+    {name:"리본", src:"images/sticker/07_bow.png"},
+    {name:"쿨한 표정", src:"images/sticker/08_cool_smiley.png"},
+    {name:"음료", src:"images/sticker/09_drink.png"},
+    {name:"예", src:"images/sticker/10_yeah.png"},
+    {name:"핑크 하트", src:"images/sticker/11_heart_pink.png"},
+    {name:"별", src:"images/sticker/12_star.png"},
+    {name:"번개", src:"images/sticker/13_lightning.png"},
+    {name:"손하트", src:"images/sticker/14_finger_heart.png"},
+    {name:"좋아요 말풍선", src:"images/sticker/15_like_bubble.png"},
+    {name:"공룡", src:"images/sticker/16_dinosaur.png"},
+    {name:"건배", src:"images/sticker/17_toast.png"},
+    {name:"곰", src:"images/sticker/18_bear.png"},
+    {name:"고양이", src:"images/sticker/19_cat.png"},
+    {name:"화이팅 말풍선", src:"images/sticker/20_fighting_bubble.png"},
+    {name:"버섯", src:"images/sticker/21_mushroom.png"},
+    {name:"체리", src:"images/sticker/22_cherries.png"},
+    {name:"하트 말풍선", src:"images/sticker/23_heart_bubble.png"},
+    {name:"ㅋㅋ 말풍선", src:"images/sticker/24_lol_bubble.png"},
+    {name:"폴더폰", src:"images/sticker/25_flip_phone.png"},
+    {name:"작은 반짝임", src:"images/sticker/26_sparkle_small.png"},
+    {name:"우유", src:"images/sticker/27_milk.png"},
+    {name:"게임패드", src:"images/sticker/28_controller.png"},
+    {name:"눈", src:"images/sticker/29_eyes.png"},
+    {name:"클로버", src:"images/sticker/30_clover.png"},
+    {name:"폴더", src:"images/sticker/31_folder.png"},
+    {name:"로딩", src:"images/sticker/32_loading.png"},
+    {name:"게임 시작", src:"images/sticker/33_game_start.png"},
+    {name:"무지개", src:"images/sticker/34_rainbow.png"},
+    {name:"작은 핑크하트", src:"images/sticker/35_heart_pink_small.png"},
+    {name:"작은 노랑하트", src:"images/sticker/36_heart_yellow_small.png"},
+    {name:"작은 파랑하트", src:"images/sticker/37_heart_blue_small.png"},
+    {name:"작은 파랑하트2", src:"images/sticker/38_heart_blue2_small.png"},
+    {name:"별똥별", src:"images/sticker/39_shooting_star.png"},
+    {name:"음표", src:"images/sticker/40_music_notes.png"},
+    {name:"하트 채팅", src:"images/sticker/41_heart_chat.png"},
+    {name:"헤드폰", src:"images/sticker/42_headphones.png"},
+    {name:"꽃", src:"images/sticker/43_flower.png"},
+    {name:"카메라", src:"images/sticker/44_camera.png"},
+    {name:"발바닥", src:"images/sticker/45_paw.png"},
+    {name:"칠", src:"images/sticker/46_chill.png"},
+    {name:"배터리", src:"images/sticker/47_battery.png"}
+
   ]
 
 };
@@ -5240,16 +5281,54 @@ function drawSticker(
     el.imageEl
   ){
 
-    const size =
-      el.size;
+    const naturalW =
+      el.imageEl.naturalWidth ||
+      1;
+
+
+    const naturalH =
+      el.imageEl.naturalHeight ||
+      1;
+
+
+    const ratio =
+      naturalW / naturalH;
+
+
+    let drawWidth;
+
+    let drawHeight;
+
+
+    if(
+      ratio >= 1
+    ){
+
+      drawWidth =
+        el.size;
+
+
+      drawHeight =
+        el.size / ratio;
+
+    }else{
+
+      drawHeight =
+        el.size;
+
+
+      drawWidth =
+        el.size * ratio;
+
+    }
 
 
     ctx.drawImage(
       el.imageEl,
-      -size/2,
-      -size/2,
-      size,
-      size
+      -drawWidth/2,
+      -drawHeight/2,
+      drawWidth,
+      drawHeight
     );
 
   }else{
@@ -5433,6 +5512,55 @@ function getObjectBounds(
     el.type ===
     "sticker"
   ){
+
+    if(
+      el.imageEl
+    ){
+
+      const naturalW =
+        el.imageEl.naturalWidth ||
+        1;
+
+
+      const naturalH =
+        el.imageEl.naturalHeight ||
+        1;
+
+
+      const ratio =
+        naturalW / naturalH;
+
+
+      if(
+        ratio >= 1
+      ){
+
+        return {
+
+          width:
+            el.size,
+
+          height:
+            el.size / ratio
+
+        };
+
+      }else{
+
+        return {
+
+          width:
+            el.size * ratio,
+
+          height:
+            el.size
+
+        };
+
+      }
+
+    }
+
 
     return {
 
@@ -5822,18 +5950,31 @@ function hitTest(
       "sticker"
     ){
 
-      const half =
-        el.size /
+      const bounds =
+        getObjectBounds(
+          el
+        );
+
+
+      const halfW =
+        bounds.width /
         dims.w *
+        100 /
+        2;
+
+
+      const halfH =
+        bounds.height /
+        dims.h *
         100 /
         2;
 
 
       if(
         Math.abs(rx) <
-          half &&
+          halfW &&
         Math.abs(ry) <
-          half
+          halfH
       ){
 
         return el;
@@ -6028,6 +6169,10 @@ function createImageElement(
 
   const image =
     new Image();
+
+
+  image.crossOrigin =
+    "anonymous";
 
 
   image.onload =
@@ -9526,6 +9671,10 @@ function renderStickerAssets(){
               new Image();
 
 
+            imageObject.crossOrigin =
+              "anonymous";
+
+
             imageObject.onload =
               function(){
 
@@ -9915,21 +10064,26 @@ window.addEventListener(
       el.type === "sticker"
     ){
 
-      let delta =
-        dx;
+      /*
+        핸들의 "바깥쪽" 방향 벡터와
+        실제 드래그 이동(dx,dy)의 내적으로
+        delta를 계산. 기존에는 e/w/n 포함
+        여부만으로 부호를 뒤집다 보니
+        NE(오른쪽 위) 모서리만 방향이
+        반대로 동작하는 버그가 있었음.
+      */
+
+      let ux = 0;
+      let uy = 0;
 
 
       if(
-        !interaction.handle.includes(
+        interaction.handle.includes(
           "e"
-        ) &&
-        !interaction.handle.includes(
-          "w"
         )
       ){
 
-        delta =
-          dy;
+        ux = 1;
 
       }
 
@@ -9937,16 +10091,46 @@ window.addEventListener(
       if(
         interaction.handle.includes(
           "w"
-        ) ||
+        )
+      ){
+
+        ux = -1;
+
+      }
+
+
+      if(
         interaction.handle.includes(
           "n"
         )
       ){
 
-        delta =
-          -delta;
+        uy = -1;
 
       }
+
+
+      if(
+        interaction.handle.includes(
+          "s"
+        )
+      ){
+
+        uy = 1;
+
+      }
+
+
+      const mag =
+        Math.sqrt(
+          ux*ux +
+          uy*uy
+        ) || 1;
+
+
+      const delta =
+        dx * (ux/mag) +
+        dy * (uy/mag);
 
 
       const minSize =
@@ -11443,6 +11627,10 @@ function loadTemplate(
             new Image();
 
 
+          image.crossOrigin =
+            "anonymous";
+
+
           image.onload =
             function(){
 
@@ -11490,6 +11678,50 @@ function loadTemplate(
         element.flipY =
           element.flipY ??
           false;
+
+
+        if(
+          element.src
+        ){
+
+          const stickerImage =
+            new Image();
+
+
+          stickerImage.crossOrigin =
+            "anonymous";
+
+
+          stickerImage.onload =
+            function(){
+
+              element.imageEl =
+                stickerImage;
+
+
+              render();
+
+            };
+
+
+          stickerImage.onerror =
+            function(){
+
+              showMsg(
+                templateMsg,
+                '"' +
+                (element.name || "스티커") +
+                '" 스티커 이미지를 불러오지 못했어요.',
+                "error"
+              );
+
+            };
+
+
+          stickerImage.src =
+            element.src;
+
+        }
 
       }
 

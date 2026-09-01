@@ -10051,19 +10051,32 @@ window.addEventListener(
         interaction.originalBoundsWidthPct !=
           null &&
         interaction.originalBoundsHeightPct !=
-          null
+          null &&
+        interaction.originalSize
       ){
 
-        const newBounds =
-          getObjectBounds(el);
+        /*
+          실제 줄바꿈된 텍스트 너비를 다시
+          재면, 글자가 커지다가 줄이 하나
+          늘어나는 순간 "가장 긴 줄의 너비"가
+          오히려 줄어드는 경우가 있어서
+          반대쪽 고정 계산이 튐. 그래서
+          실측 대신 글자 크기가 커진 비율
+          그대로를 너비/높이에 곱해서
+          항상 예측 가능하게 만듦.
+        */
+
+        const sizeRatio =
+          el.size /
+          interaction.originalSize;
 
         const newWidthPct =
-          newBounds.width /
-          dims.w * 100;
+          interaction.originalBoundsWidthPct *
+          sizeRatio;
 
         const newHeightPct =
-          newBounds.height /
-          dims.h * 100;
+          interaction.originalBoundsHeightPct *
+          sizeRatio;
 
         const anchorX =
           interaction.originalX -

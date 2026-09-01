@@ -5151,6 +5151,19 @@ function drawImage(
       height
     );
 
+  }else if(
+    el.fit ===
+    "stretch"
+  ){
+
+    ctx.drawImage(
+      el.imageEl,
+      -width/2,
+      -height/2,
+      width,
+      height
+    );
+
   }else{
 
     let drawWidth =
@@ -7893,7 +7906,7 @@ $("imageWidthInput")
 
 
       el.fit =
-        "contain";
+        "stretch";
 
 
       el.scale =
@@ -7958,7 +7971,7 @@ $("imageHeightInput")
 
 
       el.fit =
-        "contain";
+        "stretch";
 
 
       render();
@@ -10001,113 +10014,214 @@ window.addEventListener(
       "image"
     ){
 
-      let width =
+      const handle =
+        interaction.handle;
+
+      const isCorner =
+        handle.length === 2;
+
+      let newWidth =
         interaction.originalWidth;
 
-
-      let height =
+      let newHeight =
         interaction.originalHeight;
 
+      let newX =
+        interaction.originalX;
 
-      if(
-        interaction.handle.includes(
-          "e"
-        )
-      ){
-
-        width +=
-          dx;
-
-      }
+      let newY =
+        interaction.originalY;
 
 
-      if(
-        interaction.handle.includes(
-          "w"
-        )
-      ){
+      if(isCorner){
 
-        width -=
-          dx;
+        /*
+          모서리 핸들: 원본 가로세로 비율을
+          유지한 채 대각선 방향으로만 커지도록.
+          가로/세로 각각의 드래그량을 하나의
+          "가로 기준" 변화량으로 합친 뒤,
+          세로는 비율로 역산함.
+        */
 
+        const aspect =
+          interaction.originalHeight
+            ? interaction.originalWidth /
+              interaction.originalHeight
+            : 1;
 
-        el.x =
+        const percentDx =
+          dx / dims.w * 100;
+
+        const percentDy =
+          dy / dims.h * 100;
+
+        const widthDeltaFromX =
+          handle.includes("e")
+            ? percentDx
+            : -percentDx;
+
+        const widthDeltaFromY =
+          (
+            handle.includes("s")
+              ? percentDy
+              : -percentDy
+          ) * aspect;
+
+        const combinedDelta =
+          (
+            widthDeltaFromX +
+            widthDeltaFromY
+          ) / 2;
+
+        newWidth =
           clamp(
-            interaction.originalX +
-            (
-              dx /
-              dims.w *
-              100
-            ) / 2,
+            interaction.originalWidth +
+            combinedDelta,
+            5,
+            300
+          );
+
+        newHeight =
+          clamp(
+            newWidth / aspect,
+            5,
+            300
+          );
+
+        const halfW0 =
+          interaction.originalWidth / 2;
+
+        const halfH0 =
+          interaction.originalHeight / 2;
+
+        const signX =
+          handle.includes("e")
+            ? 1
+            : -1;
+
+        const signY =
+          handle.includes("s")
+            ? 1
+            : -1;
+
+        const anchorX =
+          interaction.originalX -
+          signX * halfW0;
+
+        const anchorY =
+          interaction.originalY -
+          signY * halfH0;
+
+        newX =
+          clamp(
+            anchorX +
+            signX * newWidth / 2,
             0,
             100
           );
 
-      }
-
-
-      if(
-        interaction.handle.includes(
-          "s"
-        )
-      ){
-
-        height +=
-          dy;
-
-      }
-
-
-      if(
-        interaction.handle.includes(
-          "n"
-        )
-      ){
-
-        height -=
-          dy;
-
-
-        el.y =
+        newY =
           clamp(
-            interaction.originalY +
-            (
-              dy /
-              dims.h *
-              100
-            ) / 2,
+            anchorY +
+            signY * newHeight / 2,
             0,
             100
+          );
+
+      }else{
+
+        /*
+          변(가장자리) 핸들: 기존처럼
+          가로/세로를 독립적으로 자유롭게 늘림
+        */
+
+        if(handle === "e"){
+
+          newWidth =
+            interaction.originalWidth +
+            dx / dims.w * 100;
+
+        }
+
+        if(handle === "w"){
+
+          newWidth =
+            interaction.originalWidth -
+            dx / dims.w * 100;
+
+          newX =
+            clamp(
+              interaction.originalX +
+              (dx / dims.w * 100) / 2,
+              0,
+              100
+            );
+
+        }
+
+        if(handle === "s"){
+
+          newHeight =
+            interaction.originalHeight +
+            dy / dims.h * 100;
+
+        }
+
+        if(handle === "n"){
+
+          newHeight =
+            interaction.originalHeight -
+            dy / dims.h * 100;
+
+          newY =
+            clamp(
+              interaction.originalY +
+              (dy / dims.h * 100) / 2,
+              0,
+              100
+            );
+
+        }
+
+        newWidth =
+          clamp(
+            newWidth,
+            5,
+            300
+          );
+
+        newHeight =
+          clamp(
+            newHeight,
+            5,
+            300
           );
 
       }
 
 
       el.width =
-        clamp(
-          width,
-          5,
-          300
-        );
-
+        newWidth;
 
       el.height =
-        clamp(
-          height,
-          5,
-          300
-        );
+        newHeight;
+
+      el.x =
+        newX;
+
+      el.y =
+        newY;
 
 
       el.fit =
-        "contain";
+        "stretch";
 
 
       el.scale =
-        el.originalWidth
+        interaction.originalWidth
           ? (
               el.width /
-              el.originalWidth *
+              interaction.originalWidth *
               100
             )
           : 100;

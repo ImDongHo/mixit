@@ -3388,20 +3388,6 @@ const STORAGE_KEY =
    TEST STICKERS
 ========================================================= */
 
-const TEST_STICKERS = [
-  {name:"웃음",emoji:"😂"},
-  {name:"눈물",emoji:"😭"},
-  {name:"불꽃",emoji:"🔥"},
-  {name:"하트",emoji:"❤️"},
-  {name:"엄지",emoji:"👍"},
-  {name:"백점",emoji:"💯"},
-  {name:"별",emoji:"⭐"},
-  {name:"안경",emoji:"😎"},
-  {name:"반짝",emoji:"✨"},
-  {name:"느낌표",emoji:"❗"}
-];
-
-
 /* =========================================================
    FUTURE ASSETS
 ========================================================= */
@@ -6308,78 +6294,6 @@ function createImageElement(
 
   image.src =
     src;
-
-}
-
-
-/* =========================================================
-   ADD STICKER
-========================================================= */
-
-function createStickerElement(
-  emoji,
-  name
-){
-
-  const element = {
-
-    id:
-      uid("sticker"),
-
-    type:
-      "sticker",
-
-    name:
-      name ||
-      "스티커",
-
-    content:
-      emoji,
-
-    x:
-      50,
-
-    y:
-      50,
-
-    size:
-      180,
-
-    rotation:
-      0,
-
-    opacity:
-      100,
-
-    shadow:
-      true,
-
-    flipX:
-      false,
-
-    flipY:
-      false,
-
-    z:
-      state.nextZ++
-
-  };
-
-
-  state.elements.push(
-    element
-  );
-
-
-  state.selectedId =
-    element.id;
-
-
-  syncInspector();
-
-  renderLayers();
-
-  render();
 
 }
 
@@ -9521,82 +9435,6 @@ function renderStickerAssets(){
 
   stickerAssetGrid.innerHTML =
     "";
-
-
-  TEST_STICKERS.forEach(
-    sticker=>{
-
-      const button =
-        document.createElement(
-          "button"
-        );
-
-
-      button.type =
-        "button";
-
-
-      button.className =
-        "asset-card";
-
-
-      const emoji =
-        document.createElement(
-          "span"
-        );
-
-
-      emoji.className =
-        "asset-emoji";
-
-
-      emoji.textContent =
-        sticker.emoji;
-
-
-      const name =
-        document.createElement(
-          "span"
-        );
-
-
-      name.className =
-        "asset-name";
-
-
-      name.textContent =
-        sticker.name;
-
-
-      button.appendChild(
-        emoji
-      );
-
-
-      button.appendChild(
-        name
-      );
-
-
-      button.addEventListener(
-        "click",
-        function(){
-
-          createStickerElement(
-            sticker.emoji,
-            sticker.name
-          );
-
-        }
-      );
-
-
-      stickerAssetGrid.appendChild(
-        button
-      );
-
-    }
-  );
 
 
   ASSET_MANIFEST.stickers
